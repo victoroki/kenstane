@@ -17,7 +17,7 @@ const AboutSection = () => {
           <div className="space-y-6 animate-slide-in-left">
             <h3 className="text-4xl font-bold text-slate-900">Transforming Africa's Energy Future</h3>
             <p className="text-lg text-slate-600 leading-relaxed">
-              Kenstane Energy Ltd is Kenya's premier professional training and consultancy firm dedicated to bridging critical skills gaps in the power generation sector. We specialize in upskilling professionals across renewable energy technologies and risk engineering.
+              Kenstane Energy Ltd aims to be Africa's premium power generation training and consultancy partner, bridging critical skills gaps with industry-driven programs and risk engineering expertise.
             </p>
             <p className="text-lg text-slate-600 leading-relaxed">
               Aligned with Kenya's Vision 2030 and global climate goals, we equip graduates and professionals with technical expertise, project management rigor, and risk mitigation strategies for sustainable energy projects.
@@ -41,15 +41,15 @@ const AboutSection = () => {
                 </div>
                 <div>
                   <h4 className="font-bold text-slate-900 text-lg mb-2">Mission</h4>
-                  <p className="text-slate-600">Delivering industry-driven training combining technical mastery, risk engineering, and innovation to bridge academic and workplace readiness gaps.</p>
+                  <p className="text-slate-600">Upscale and rescale industry-driven training that fuses technical mastery, risk engineering, and innovation to eliminate academic to workplace readiness gaps.</p>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Right Column - Values Grid */}
+          {/* Right Column - Values Grid (all values in one grid) */}
           <div className="grid grid-cols-2 gap-6 animate-slide-in-right">
-            {CORE_VALUES.slice(0, 4).map((value, idx) => (
+            {CORE_VALUES.map((value, idx) => (
               <div 
                 key={idx} 
                 className="group bg-white p-8 rounded-2xl border-2 border-slate-100 hover:border-transparent hover:shadow-2xl transition-all transform hover:-translate-y-2 animate-scale-in"
@@ -65,23 +65,7 @@ const AboutSection = () => {
           </div>
         </div>
 
-        {/* Additional Values */}
-        {CORE_VALUES.length > 4 && (
-          <div className="grid md:grid-cols-2 lg:grid-cols-2 gap-6 max-w-4xl mx-auto">
-            {CORE_VALUES.slice(4).map((value, idx) => (
-              <div 
-                key={idx} 
-                className="group bg-white p-8 rounded-2xl border-2 border-slate-100 hover:border-transparent hover:shadow-2xl transition-all transform hover:-translate-y-2"
-              >
-                <div className={`w-16 h-16 bg-gradient-to-br ${value.color} rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-all`}>
-                  <value.icon className="text-white" size={32} />
-                </div>
-                <h4 className="font-bold text-slate-900 mb-2 text-lg">{value.title}</h4>
-                <p className="text-slate-600 text-sm leading-relaxed">{value.desc}</p>
-              </div>
-            ))}
-          </div>
-        )}
+        {/* Additional Values removed: all values now aligned in single grid */}
       </div>
     </section>
   );

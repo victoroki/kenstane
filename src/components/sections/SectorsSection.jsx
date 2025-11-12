@@ -47,7 +47,7 @@ const SectorsSection = () => {
               Trusted by Industry Leaders
             </h3>
             <p className="text-lg text-slate-600 mb-8">
-              We've partnered with over 50 organizations across East Africa, delivering excellence in training and risk engineering services.
+              We are planning to partner with operators, managers, insurance firms, and loss adjusters across East Africa to deliver excellence in training and risk engineering services.
             </p>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
               {[

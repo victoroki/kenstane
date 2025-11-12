@@ -86,11 +86,11 @@ export const SERVICES = [
     link: "/risk-engineering"
   },
   { 
-    icon: Briefcase, 
-    title: "Consultancy Services", 
-    desc: "Project management, technical design, and workforce development solutions",
-    color: "from-amber-500 to-orange-500",
-    link: "#consultancy"
+    icon: Flame, 
+    title: "Fire Protection & Detection", 
+    desc: "Design, installation, and maintenance of fire suppression and detection systems",
+    color: "from-red-500 to-orange-500",
+    link: "/contact"
   },
   {
     icon: Wrench,
