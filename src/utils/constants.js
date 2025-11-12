@@ -1,7 +1,8 @@
 import { 
   Wind, Zap, Shield, Users, BookOpen, Award, 
   Sun, Droplet, Building2, GraduationCap, Briefcase,
-  Factory, Wrench, Lightbulb, Eye, Heart, Handshake, Target
+  Factory, Wrench, Lightbulb, Eye, Heart, Handshake, Target,
+  Flame, Gem
 } from 'lucide-react';
 
 // Company Information
@@ -72,17 +73,17 @@ export const CORE_VALUES = [
 export const SERVICES = [
   { 
     icon: BookOpen, 
-    title: "Training Programs", 
-    desc: "Industry-certified courses in CCGT, Solar, Wind, HSE, and Graduate CEng Pathways",
+    title: "Training", 
+    desc: "Specialized programs for graduates, 2-5 year professionals, and managers in CCGT, Solar, Wind, HSE, and CEng pathways",
     color: "from-emerald-500 to-teal-500",
-    link: "#training"
+    link: "/training"
   },
   { 
     icon: Shield, 
     title: "Risk Engineering", 
     desc: "Comprehensive site surveys, QRA, PML/EML assessment, and thermal drone inspections",
     color: "from-blue-500 to-indigo-500",
-    link: "#risk-engineering"
+    link: "/risk-engineering"
   },
   { 
     icon: Briefcase, 
@@ -90,6 +91,13 @@ export const SERVICES = [
     desc: "Project management, technical design, and workforce development solutions",
     color: "from-amber-500 to-orange-500",
     link: "#consultancy"
+  },
+  {
+    icon: Wrench,
+    title: "Technical Support",
+    desc: "Technical support for thermal imaging, solar power plants, wind, and electrical systems",
+    color: "from-cyan-500 to-blue-500",
+    link: "/contact"
   }
 ];
 
@@ -135,14 +143,10 @@ export const TRAINING_PROGRAMS = [
 
 // Risk Engineering Services
 export const RISK_SERVICES = [
-  "Site Risk Surveys for Power Plants",
-  "Risk Quality Assessment (QRA, PML/EML)",
-  "Thermal Drone Inspection Services",
-  "Critical Equipment Reviews",
-  "Fire Risk Assessment",
-  "Insurance Support & Advisory",
-  "Business Continuity Planning",
-  "Loss Prevention Engineering"
+  "On-site risk survey of power plants",
+  "On-site mining assessment",
+  "On-site commercial property inspection",
+  "On-site oil & gas facility evaluation"
 ];
 
 // Sectors We Serve
@@ -170,6 +174,18 @@ export const SECTORS = [
     name: "Universities", 
     desc: "Academic Partnerships",
     color: "from-purple-500 to-pink-500"
+  },
+  {
+    icon: Gem,
+    name: "Mining",
+    desc: "Risk engineering, safety management, and asset integrity for mining sites",
+    color: "from-amber-600 to-orange-600"
+  },
+  {
+    icon: Flame,
+    name: "Oil & Gas",
+    desc: "Risk assessments and training across upstream, midstream, and downstream operations",
+    color: "from-red-600 to-orange-600"
   }
 ];
 

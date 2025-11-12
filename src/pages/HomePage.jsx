@@ -7,7 +7,7 @@ export default function HomePage() {
   return (
     <>
       <HeroSection />
-      <ServicesSection />
+      {/* <ServicesSection /> */}
       <CaseStudiesSection />
     </>
   );

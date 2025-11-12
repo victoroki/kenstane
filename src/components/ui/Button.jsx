@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const Button = ({ 
   children, 
@@ -7,6 +8,9 @@ const Button = ({
   icon: Icon, 
   iconPosition = 'right',
   className = '',
+  as,
+  href,
+  to,
   ...props 
 }) => {
   const baseStyles = "font-semibold rounded-xl transition-all transform inline-flex items-center justify-center";
@@ -26,15 +30,33 @@ const Button = ({
     lg: "px-10 py-5 text-lg"
   };
   
+  // Determine which component to render based on `as`
+  let Component = 'button';
+  if (as === 'a') {
+    Component = 'a';
+  } else if (as === 'link') {
+    Component = Link;
+  }
+
+  const componentProps = {
+    className: `${baseStyles} ${variants[variant]} ${sizes[size]} ${className}`,
+    ...props
+  };
+
+  if (Component === 'a') {
+    componentProps.href = href || to || '#';
+  }
+
+  if (Component === Link) {
+    componentProps.to = to || href || '#';
+  }
+
   return (
-    <button 
-      className={`${baseStyles} ${variants[variant]} ${sizes[size]} ${className}`}
-      {...props}
-    >
+    <Component {...componentProps}>
       {Icon && iconPosition === 'left' && <Icon size={20} className="mr-2" />}
       {children}
       {Icon && iconPosition === 'right' && <Icon size={20} className="ml-2" />}
-    </button>
+    </Component>
   );
 };
 
