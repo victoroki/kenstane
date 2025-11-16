@@ -2,7 +2,7 @@ import React, { useRef } from 'react';
 import { ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
 import { SERVICES } from '../../utils/constants';
 import SectionHeader from '../ui/SectionHeader';
-import { ServiceCard } from '../ui/Card';
+// import { ServiceCard } from '../ui/Card';
 // import { Link } from "react-router-dom";
 
 const ServicesSection = () => {

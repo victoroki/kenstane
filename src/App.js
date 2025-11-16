@@ -10,7 +10,11 @@ import TrainingPage from './pages/TrainingPage';
 import RiskEngineeringPage from './pages/RiskEngineeringPage';
 import SectorsPage from './pages/SectorsPage';
 import BlogPage from './pages/BlogPage';
+import ArticlesPage from './pages/ArticlesPage';
+import MediaPage from './pages/MediaPage';
+import EventsPage from './pages/EventsPage';
 import ContactPage from './pages/ContactPage';
+import TestimonialsPage from './pages/TestimonialsPage';
 
 function App() {
   return (
@@ -23,8 +27,12 @@ function App() {
           <Route path="/training" element={<TrainingPage />} />
           <Route path="/risk-engineering" element={<RiskEngineeringPage />} />
           <Route path="/sectors" element={<SectorsPage />} />
-          <Route path="/blog" element={<BlogPage />} />
+          <Route path="/blogs" element={<BlogPage />} />
+          <Route path="/articles" element={<ArticlesPage />} />
+          <Route path="/media" element={<MediaPage />} />
+          <Route path="/events" element={<EventsPage />} />
           <Route path="/contact" element={<ContactPage />} />
+          <Route path="/testimonials" element={<TestimonialsPage />} />
         </Routes>
       </Layout>
     </Router>

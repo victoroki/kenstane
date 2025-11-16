@@ -1,7 +1,34 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Wind, Sun, ChevronRight, Download } from 'lucide-react';
 import { HERO_STATS } from '../../utils/constants';
 import Button from '../ui/Button';
+
+const CountUp = ({ end, duration = 2200, suffix = '' }) => {
+  const [val, setVal] = useState(1);
+  const [started, setStarted] = useState(false);
+  const ref = useRef(null);
+  useEffect(() => {
+    const node = ref.current;
+    if (!node) return;
+    const obs = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting && !started) {
+        setStarted(true);
+        const startTime = performance.now();
+        const animate = (t) => {
+          const progress = Math.min((t - startTime) / duration, 1);
+          const eased = 1 - Math.pow(1 - progress, 3);
+          const current = Math.floor(1 + (end - 1) * eased);
+          setVal(current);
+          if (progress < 1) requestAnimationFrame(animate);
+        };
+        requestAnimationFrame(animate);
+      }
+    }, { threshold: 0.3 });
+    obs.observe(node);
+    return () => obs.disconnect();
+  }, [end, duration, started]);
+  return <span ref={ref}>{val}{suffix}</span>;
+};
 
 const VideoHeroSection = () => {
   return (
@@ -49,10 +76,11 @@ const VideoHeroSection = () => {
               </div> */}
 
 {/* Main Heading */}
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-snug">
               Bridging critical skills gaps with
-              <span className="block mt-2 bg-gradient-to-r from-emerald-400 via-teal-400 to-cyan-400 bg-clip-text text-transparent">
+              <span className="block mt-2 pb-1 md:pb-2 bg-gradient-to-r from-emerald-400 via-teal-400 to-cyan-400 bg-clip-text text-transparent">
                 world-class renewable energy & risk engineering training
+
               </span>
             </h1>
 
@@ -84,14 +112,20 @@ const VideoHeroSection = () => {
       <section className="relative bg-white py-12 md:py-20">
         <div className="container mx-auto px-4 sm:px-6">
           {/* Stats Cards */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8 max-w-6xl mx-auto">
+          <div className={`grid grid-cols-2 ${HERO_STATS.length === 3 ? 'md:grid-cols-3' : 'md:grid-cols-4'} gap-4 md:gap-8 max-w-6xl mx-auto`}>
             {HERO_STATS.map((stat, idx) => (
               <div
                 key={idx}
-                className="group bg-white p-4 md:p-8 rounded-xl md:rounded-2xl shadow-lg md:shadow-xl hover:shadow-2xl transition-all transform hover:-translate-y-2 border-2 border-slate-200 hover:border-emerald-500"
+                className="bg-white p-4 md:p-8 rounded-xl md:rounded-2xl shadow-lg md:shadow-xl border-2 border-slate-200"
               >
-                <stat.icon className="text-emerald-600 mb-2 md:mb-4 mx-auto group-hover:scale-110 group-hover:text-emerald-500 transition-all" size={32} />
-                <div className="text-3xl md:text-5xl font-bold text-slate-900 mb-1 md:mb-2">{stat.num}</div>
+                <stat.icon className="text-emerald-600 mb-2 md:mb-4 mx-auto" size={32} />
+                <div className="text-3xl md:text-5xl font-bold text-slate-900 mb-1 md:mb-2">
+                  {(() => {
+                    const target = parseInt(String(stat.num).replace(/[^0-9]/g, ''), 10) || 1;
+                    const suffix = String(stat.num).replace(/[0-9]/g, '');
+                    return <CountUp end={target} duration={2400} suffix={suffix} />;
+                  })()}
+                </div>
                 <div className="text-xs md:text-sm text-slate-600 mt-1 md:mt-2 font-medium">{stat.label}</div>
               </div>
             ))}

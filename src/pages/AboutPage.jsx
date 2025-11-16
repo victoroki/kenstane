@@ -6,7 +6,7 @@ export default function AboutPage() {
   return (
     <>
       <AboutSection />
-      <SectorsSection />
+      {/* <SectorsSection /> */}
     </>
   );
 }

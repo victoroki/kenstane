@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { GraduationCap, Download, CheckCircle, Award, Clock, Users } from 'lucide-react';
-import { ENERGY_TYPES, TRAINING_PROGRAMS } from '../../utils/constants';
+import { ENERGY_TYPES } from '../../utils/constants';
 import SectionHeader from '../ui/SectionHeader';
 import Button from '../ui/Button';
 
@@ -9,11 +9,18 @@ const TrainingSection = () => {
 
   const renewableTrainings = [
     {
-      title: 'Solar & Wind Power Plant Risk Training',
+      title: 'Solar Power Plant',
       audience: 'Risk Engineers, Project Managers',
       duration: '4 Weeks',
       level: 'Advanced',
       color: 'blue'
+    },
+    {
+      title: 'Wind Power Plant',
+      audience: 'Risk Engineers, Project Managers',
+      duration: '4 Weeks',
+      level: 'Advanced',
+      color: 'green'
     },
     {
       title: 'Hydropower Operations & Safety',
@@ -33,7 +40,7 @@ const TrainingSection = () => {
 
   const nonRenewableTrainings = [
     {
-      title: 'CCGT Power Plant Training',
+      title: 'CCGT Power Plant',
       audience: 'Insurers, Operators, Engineers',
       duration: '4-6 Weeks',
       level: 'Professional',
@@ -166,53 +173,46 @@ const TrainingSection = () => {
         {activeTab === 'nonrenewable' && renderTrainingCards(nonRenewableTrainings)}
         {activeTab === 'management' && renderTrainingCards(managementTrainings)}
 
-        {/* Graduate Engineering Training (GET) Highlight */}
-        <div className="max-w-6xl mx-auto">
-          <div className="relative bg-gradient-to-r from-kenya-black via-kenya-red to-kenya-green text-white p-12 rounded-3xl overflow-hidden shadow-2xl">
-            {/* Background Pattern */}
-            <div className="absolute inset-0 opacity-10">
-              <div className="absolute top-0 right-0 w-64 h-64 bg-white rounded-full blur-3xl"></div>
-              <div className="absolute bottom-0 left-0 w-96 h-96 bg-white rounded-full blur-3xl"></div>
-            </div>
-
-            <div className="relative z-10">
-              <div className="flex flex-col md:flex-row md:items-center gap-6 mb-8">
-                <div className="w-20 h-20 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center flex-shrink-0">
-                  <Award size={40} />
-                </div>
-                <div>
-                  <h3 className="text-4xl font-bold mb-2">Graduate Engineering Training (GET)</h3>
-                  <p className="text-emerald-100 text-lg">Our flagship employability program</p>
-                </div>
+        {activeTab !== 'management' && (
+          <div className="max-w-6xl mx-auto">
+            <div className="relative bg-gradient-to-r from-kenya-black via-kenya-red to-kenya-green text-white p-12 rounded-3xl overflow-hidden shadow-2xl">
+              <div className="absolute inset-0 opacity-10">
+                <div className="absolute top-0 right-0 w-64 h-64 bg-white rounded-full blur-3xl"></div>
+                <div className="absolute bottom-0 left-0 w-96 h-96 bg-white rounded-full blur-3xl"></div>
               </div>
-              
-              <p className="text-lg mb-8 leading-relaxed">
-                Graduate training focuses on bridging the skills gap among fresh university and college graduates. The program offers employability training, technical certification programs, mentorship, and corporate induction services aimed at improving workplace readiness and employability.
-              </p>
-              
-              <div className="grid md:grid-cols-4 gap-6">
-                {['Technical Certification', 'Mentorship Programs', 'Corporate Induction', 'Career Guidance'].map((item, idx) => (
-                  <div 
-                    key={idx} 
-                    className="bg-white/10 backdrop-blur-sm p-6 rounded-xl text-center hover:bg-white/20 transition-all transform hover:scale-105"
-                  >
-                    <CheckCircle className="mx-auto mb-3" size={28} />
-                    <p className="text-sm font-semibold">{item}</p>
+              <div className="relative z-10">
+                <div className="flex flex-col md:flex-row md:items-center gap-6 mb-8">
+                  <div className="w-20 h-20 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center flex-shrink-0">
+                    <Award size={40} />
                   </div>
-                ))}
-              </div>
-
-              <div className="mt-10 flex flex-col sm:flex-row gap-4">
-                <Button variant="secondary" icon={Download} iconPosition="left">
-                  GET Program Details
-                </Button>
-                <button className="bg-transparent border-2 border-white px-8 py-4 rounded-xl font-semibold hover:bg-white hover:text-kenya-green transition-all">
-                  Apply Now
-                </button>
+                  <div>
+                    <h3 className="text-4xl font-bold mb-2">Graduate Engineering Training (GET)</h3>
+                    <p className="text-emerald-100 text-lg">Our flagship employability program</p>
+                  </div>
+                </div>
+                <p className="text-lg mb-8 leading-relaxed">
+                  Graduate training focuses on bridging the skills gap among fresh university and college graduates. The program offers employability training, technical certification programs, mentorship, and corporate induction services aimed at improving workplace readiness and employability.
+                </p>
+                <div className="grid md:grid-cols-4 gap-6">
+                  {['Technical Certification', 'Mentorship Programs', 'Corporate Induction', 'Career Guidance'].map((item, idx) => (
+                    <div key={idx} className="bg-white/10 backdrop-blur-sm p-6 rounded-xl text-center hover:bg-white/20 transition-all transform hover:scale-105">
+                      <CheckCircle className="mx-auto mb-3" size={28} />
+                      <p className="text-sm font-semibold">{item}</p>
+                    </div>
+                  ))}
+                </div>
+                <div className="mt-10 flex flex-col sm:flex-row gap-4">
+                  <Button variant="secondary" icon={Download} iconPosition="left">
+                    GET Program Details
+                  </Button>
+                  <button className="bg-transparent border-2 border-white px-8 py-4 rounded-xl font-semibold hover:bg-white hover:text-kenya-green transition-all">
+                    Apply Now
+                  </button>
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        )}
       </div>
     </section>
   );

@@ -41,7 +41,7 @@ const SectorsSection = () => {
         </div>
 
         {/* Additional Info */}
-        <div className="mt-20 max-w-4xl mx-auto text-center">
+        {/* <div className="mt-20 max-w-4xl mx-auto text-center">
           <div className="bg-gradient-to-r from-slate-50 to-white p-10 rounded-3xl border-2 border-slate-100">
             <h3 className="text-3xl font-bold text-slate-900 mb-4">
               Trusted by Industry Leaders
@@ -65,7 +65,7 @@ const SectorsSection = () => {
               ))}
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
     </section>
   );

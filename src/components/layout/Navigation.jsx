@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, Zap } from 'lucide-react';
+import { Menu, X, ChevronDown } from 'lucide-react';
 
 
 const Navigation = ({ scrolled, mobileMenuOpen, setMobileMenuOpen }) => {
@@ -14,7 +14,12 @@ const Navigation = ({ scrolled, mobileMenuOpen, setMobileMenuOpen }) => {
     { name: 'Training', path: '/training' },
     { name: 'Risk Engineering', path: '/risk-engineering' },
     { name: 'Sectors', path: '/sectors' },
-    { name: 'Blog', path: '/blog' },
+    { name: 'Community', path: '/blogs', children: [
+      { name: 'Blogs', path: '/blogs' },
+      { name: 'Articles', path: '/articles' },
+      { name: 'Media', path: '/media' },
+      { name: 'Events', path: '/events' }
+    ] },
     { name: 'Contact', path: '/contact' }
   ];
 
@@ -47,20 +52,45 @@ const Navigation = ({ scrolled, mobileMenuOpen, setMobileMenuOpen }) => {
           {/* Desktop Menu */}
           <div className="hidden lg:flex space-x-1">
             {NAV_ITEMS.map((item) => (
-              <Link
-                key={item.name}
-                to={item.path}
-                className={`relative px-4 py-2 font-medium transition-colors group ${
-                  isActive(item.path) 
-                    ? 'text-kenya-red' 
-                    : 'text-slate-700 hover:text-kenya-red'
-                }`}
-              >
-                {item.name}
-                <span className={`absolute bottom-0 left-0 h-0.5 bg-gradient-to-r from-kenya-green to-kenya-red transition-all duration-300 ${
-                  isActive(item.path) ? 'w-full' : 'w-0 group-hover:w-full'
-                }`}></span>
-              </Link>
+              item.children ? (
+                <div key={item.name} className="relative group">
+                  <Link
+                    to={item.path}
+                    className={`relative px-4 py-2 font-medium transition-colors flex items-center ${
+                      isActive(item.path) ? 'text-kenya-red' : 'text-slate-700 hover:text-kenya-red'
+                    }`}
+                  >
+                    {item.name}
+                    <ChevronDown size={16} className="ml-1" />
+                  </Link>
+                  <div className="absolute left-0 mt-2 w-48 bg-white rounded-lg shadow-xl border border-slate-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all">
+                    {item.children.map((child) => (
+                      <Link
+                        key={child.name}
+                        to={child.path}
+                        className={`block px-4 py-2 text-sm text-slate-700 hover:bg-gradient-to-r hover:from-kenya-green hover:to-kenya-red hover:text-white`}
+                      >
+                        {child.name}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              ) : (
+                <Link
+                  key={item.name}
+                  to={item.path}
+                  className={`relative px-4 py-2 font-medium transition-colors group ${
+                    isActive(item.path) 
+                      ? 'text-kenya-red' 
+                      : 'text-slate-700 hover:text-kenya-red'
+                  }`}
+                >
+                  {item.name}
+                  <span className={`absolute bottom-0 left-0 h-0.5 bg-gradient-to-r from-kenya-green to-kenya-red transition-all duration-300 ${
+                    isActive(item.path) ? 'w-full' : 'w-0 group-hover:w-full'
+                  }`}></span>
+                </Link>
+              )
             ))}
           </div>
 
@@ -79,19 +109,45 @@ const Navigation = ({ scrolled, mobileMenuOpen, setMobileMenuOpen }) => {
       <div className={`fixed inset-0 bg-kenya-black/95 backdrop-blur-lg z-40 lg:hidden transition-all duration-500 ${mobileMenuOpen ? 'opacity-100 visible' : 'opacity-0 invisible'}`}>
         <div className="flex flex-col items-center justify-center h-full space-y-8">
           {NAV_ITEMS.map((item, idx) => (
-            <Link
-              key={item.name}
-              to={item.path}
-              onClick={() => setMobileMenuOpen(false)}
-              className={`text-2xl font-semibold transition-all transform hover:scale-110 ${
-                isActive(item.path) ? 'text-kenya-red' : 'text-white hover:text-kenya-red'
-              }`}
-              style={{
-                animation: mobileMenuOpen ? `fadeInUp 0.5s ease-out ${idx * 0.1}s both` : 'none'
-              }}
-            >
-              {item.name}
-            </Link>
+            item.children ? (
+              <div
+                key={item.name}
+                className="text-center"
+                style={{ animation: mobileMenuOpen ? `fadeInUp 0.5s ease-out ${idx * 0.1}s both` : 'none' }}
+              >
+                <Link
+                  to={item.path}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className={`text-2xl font-semibold ${isActive(item.path) ? 'text-kenya-red' : 'text-white hover:text-kenya-red'}`}
+                >
+                  {item.name}
+                </Link>
+                <div className="mt-4 space-y-2">
+                  {item.children.map((child) => (
+                    <Link
+                      key={child.name}
+                      to={child.path}
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="block text-white/80 hover:text-white text-lg"
+                    >
+                      {child.name}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            ) : (
+              <Link
+                key={item.name}
+                to={item.path}
+                onClick={() => setMobileMenuOpen(false)}
+                className={`text-2xl font-semibold transition-all transform hover:scale-110 ${
+                  isActive(item.path) ? 'text-kenya-red' : 'text-white hover:text-kenya-red'
+                }`}
+                style={{ animation: mobileMenuOpen ? `fadeInUp 0.5s ease-out ${idx * 0.1}s both` : 'none' }}
+              >
+                {item.name}
+              </Link>
+            )
           ))}
         </div>
       </div>

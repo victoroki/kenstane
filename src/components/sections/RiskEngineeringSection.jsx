@@ -1,5 +1,5 @@
 import React from 'react';
-import { Shield, CheckCircle, FileText, Zap, Target } from 'lucide-react';
+import { Shield, CheckCircle, Building2 } from 'lucide-react';
 import { RISK_SERVICES } from '../../utils/constants';
 import SectionHeader from '../ui/SectionHeader';
 
@@ -42,11 +42,10 @@ const RiskEngineeringSection = () => {
             <div className="relative z-10">
               <h3 className="text-4xl font-bold mb-8">Comprehensive Risk Solutions</h3>
               
-              <div className="grid md:grid-cols-3 gap-8 mb-10">
+              <div className="grid md:grid-cols-2 gap-8 mb-10">
                 {[
                   { icon: Shield, title: "Site Surveys", desc: "Comprehensive on-site risk assessments and safety audits" },
-                  { icon: FileText, title: "QRA & PML/EML", desc: "Quantitative risk analysis and loss estimation" },
-                  { icon: Zap, title: "Thermal Inspection", desc: "Advanced drone-based thermal diagnostics" }
+                  { icon: Building2, title: "Reinstatement of Property", desc: "Assessment and guidance for property reinstatement and restoration" }
                 ].map((item, idx) => (
                   <div 
                     key={idx} 
@@ -61,19 +60,7 @@ const RiskEngineeringSection = () => {
                 ))}
               </div>
 
-              {/* Additional Features */}
-              <div className="grid md:grid-cols-2 gap-6">
-                <div className="bg-white/10 backdrop-blur-sm p-6 rounded-xl border border-white/20">
-                  <Target className="mb-3" size={32} />
-                  <h4 className="font-bold text-lg mb-2">Customized Solutions</h4>
-                  <p className="text-gray-100 text-sm">Tailored risk engineering services designed specifically for your project requirements and industry standards.</p>
-                </div>
-                <div className="bg-white/10 backdrop-blur-sm p-6 rounded-xl border border-white/20">
-                  <Shield className="mb-3" size={32} />
-                  <h4 className="font-bold text-lg mb-2">Insurance Support</h4>
-                  <p className="text-gray-100 text-sm">Expert advisory services to support insurance applications, claims, and risk mitigation strategies.</p>
-                </div>
-              </div>
+              {/* Additional features removed per request */}
             </div>
           </div>
 
@@ -85,17 +72,17 @@ const RiskEngineeringSection = () => {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a 
-                href="#contact" 
+                href="/contact" 
                 className="bg-gradient-to-r from-kenya-red to-kenya-red-dark text-white px-10 py-4 rounded-xl font-semibold hover:shadow-2xl hover:shadow-red-500/50 transition-all transform hover:scale-105 inline-flex items-center justify-center"
               >
                 Request a Quote
               </a>
-              <a 
+              {/* <a 
                 href="#" 
                 className="bg-white border-2 border-kenya-green text-kenya-green px-10 py-4 rounded-xl font-semibold hover:bg-green-50 transition-all transform hover:scale-105 inline-flex items-center justify-center shadow-lg"
               >
                 View Case Studies
-              </a>
+              </a> */}
             </div>
           </div>
         </div>

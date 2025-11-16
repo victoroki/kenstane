@@ -1,7 +1,7 @@
 import { 
   Wind, Zap, Shield, Users, BookOpen, Award, 
-  Sun, Droplet, Building2, GraduationCap, Briefcase,
-  Factory, Wrench, Lightbulb, Eye, Heart, Handshake, Target,
+  Sun, Droplet, Building2, GraduationCap,
+  Factory, Wrench, Lightbulb, Heart, Handshake, Briefcase, Target,
   Flame, Gem
 } from 'lucide-react';
 
@@ -10,7 +10,7 @@ export const COMPANY_INFO = {
   name: "Kenstane Energy Ltd",
   tagline: "ENERGY LIMITED",
   phone: "+254 793 041 411",
-  email: "info@kenstaneltd.com",
+  email: "info@kenstaneltd.co.ke",
   website: "kenstaneenergyltd.co.ke",
   location: "Kiambu, Kenya"
 };
@@ -23,10 +23,9 @@ export const NAV_ITEMS = [
 
 // Hero Stats
 export const HERO_STATS = [
-  { num: "500+", label: "Professionals Trained", icon: Users },
-  { num: "50+", label: "Corporate Clients", icon: Building2 },
-  { num: "2+", label: "Years Experience", icon: Award },
-  { num: "100%", label: "Industry Certified", icon: Shield }
+  { num: "150+", label: "Professionals Trained", icon: Users },
+  { num: "1+", label: "Years Experience", icon: Award },
+  { num: "12+", label: "Specialized Courses", icon: BookOpen }
 ];
 
 // Core Values
@@ -86,16 +85,16 @@ export const SERVICES = [
     link: "/risk-engineering"
   },
   { 
-    icon: Flame, 
-    title: "Fire Protection & Detection", 
-    desc: "Design, installation, and maintenance of fire suppression and detection systems",
+    icon: Briefcase, 
+    title: "Consultancy Services", 
+    desc: "Fire Protection & Detection: Design, installation, and maintenance of fire suppression and detection systems",
     color: "from-red-500 to-orange-500",
     link: "/contact"
   },
   {
     icon: Wrench,
     title: "Technical Support",
-    desc: "Technical support for thermal imaging, solar power plants, wind, and electrical systems",
+    desc: "Technical support for thermal imaging, ultrasonic testing, solar power plants, wind, and electrical systems",
     color: "from-cyan-500 to-blue-500",
     link: "/contact"
   }
@@ -112,14 +111,14 @@ export const ENERGY_TYPES = [
 // Training Programs
 export const TRAINING_PROGRAMS = [
   {
-    title: "CCGT Power Plant Training",
+    title: "CCGT Power Plant",
     audience: "Insurers, Operators, Engineers",
     duration: "4-6 Weeks",
     level: "Professional",
     color: "emerald"
   },
   {
-    title: "Solar & Wind Power Plant Risk Training",
+    title: "Solar & Wind Power Plant",
     audience: "Risk Engineers, Project Managers",
     duration: "4 Weeks",
     level: "Advanced",

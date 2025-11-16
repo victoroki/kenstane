@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Phone, Mail, MapPin, Globe, Send, CheckCircle } from 'lucide-react';
+import { Phone, Mail, MapPin, Send, CheckCircle } from 'lucide-react';
 import SectionHeader from '../ui/SectionHeader';
 import { FadeIn, SlideInLeft, SlideInRight } from '../animations/AnimatedElements';
 

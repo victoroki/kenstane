@@ -1,5 +1,5 @@
 import React from 'react';
-import { Eye, Target } from 'lucide-react';
+import { Eye, Target, Shield, Handshake, Award } from 'lucide-react';
 import { CORE_VALUES } from '../../utils/constants';
 import SectionHeader from '../ui/SectionHeader';
 
@@ -47,25 +47,52 @@ const AboutSection = () => {
             </div>
           </div>
 
-          {/* Right Column - Values Grid (all values in one grid) */}
-          <div className="grid grid-cols-2 gap-6 animate-slide-in-right">
-            {CORE_VALUES.map((value, idx) => (
-              <div 
-                key={idx} 
-                className="group bg-white p-8 rounded-2xl border-2 border-slate-100 hover:border-transparent hover:shadow-2xl transition-all transform hover:-translate-y-2 animate-scale-in"
-                style={{ animationDelay: `${idx * 0.1}s` }}
-              >
-                <div className={`w-16 h-16 bg-gradient-to-br ${value.color} rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 group-hover:rotate-6 transition-all`}>
-                  <value.icon className="text-white" size={32} />
+          {/* Right Column - Core Values */}
+          <div className="animate-slide-in-right">
+            <h3 className="text-3xl font-bold text-slate-900 mb-6">Core Values</h3>
+            <div className="grid grid-cols-2 gap-6">
+              {CORE_VALUES.map((value, idx) => (
+                <div 
+                  key={idx} 
+                  className="bg-white p-8 rounded-2xl border-2 border-slate-100"
+                  style={{ animationDelay: `${idx * 0.1}s` }}
+                >
+                  <div className={`w-16 h-16 bg-gradient-to-br ${value.color} rounded-2xl flex items-center justify-center mb-4`}>
+                    <value.icon className="text-white" size={32} />
+                  </div>
+                  <h4 className="font-bold text-slate-900 mb-2 text-lg">{value.title}</h4>
+                  <p className="text-slate-600 text-sm leading-relaxed">{value.desc}</p>
                 </div>
-                <h4 className="font-bold text-slate-900 mb-2 text-lg">{value.title}</h4>
-                <p className="text-slate-600 text-sm leading-relaxed">{value.desc}</p>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
 
         {/* Additional Values removed: all values now aligned in single grid */}
+                <div className="mt-20 max-w-4xl mx-auto text-center">
+                  <div className="bg-gradient-to-r from-slate-50 to-white p-10 rounded-3xl border-2 border-slate-100">
+                    <h3 className="text-3xl font-bold text-slate-900 mb-4">
+                      Trusted by Industry Leaders
+                    </h3>
+                    <p className="text-lg text-slate-600 mb-8">
+                      We are planning to partner with operators, managers, insurance firms, and loss adjusters across East Africa to deliver excellence in training and risk engineering services.
+                    </p>
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-8">
+                      {[
+                        { label: "Trust", icon: Shield, color: "from-emerald-500 to-teal-500" },
+                        { label: "Partnership", icon: Handshake, color: "from-blue-500 to-indigo-500" },
+                        { label: "Leadership", icon: Award, color: "from-amber-500 to-orange-500" }
+                      ].map((item, idx) => (
+                        <div key={idx} className="text-center">
+                          <div className={`w-16 h-16 md:w-20 md:h-20 bg-gradient-to-br ${item.color} rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg`}>
+                            <item.icon className="text-white" size={28} />
+                          </div>
+                          <div className="text-sm md:text-base text-slate-700 font-semibold">{item.label}</div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
       </div>
     </section>
   );

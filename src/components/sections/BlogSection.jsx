@@ -18,7 +18,7 @@ const BlogSection = () => {
     <section id="blog" className="py-24 bg-gradient-to-b from-slate-50 to-white">
       <div className="container mx-auto px-6">
         <SectionHeader 
-          title="Insights & Articles"
+          title="Insights & Updates"
           subtitle="Industry expertise, trends, and thought leadership from our team"
         />
 
@@ -31,7 +31,7 @@ const BlogSection = () => {
                 <div className="bg-gradient-to-br from-kenya-green to-kenya-red h-80 md:h-auto flex items-center justify-center text-white">
                   <div className="text-center p-12">
                     <div className="text-9xl mb-4">📰</div>
-                    <div className="text-2xl font-bold">Featured Article</div>
+                    <div className="text-2xl font-bold">Featured Post</div>
                   </div>
                 </div>
 
@@ -60,7 +60,7 @@ const BlogSection = () => {
                     {BLOG_POSTS[0].excerpt}
                   </p>
                   <button className="flex items-center text-kenya-green font-semibold group-hover:gap-3 transition-all">
-                    Read Article
+                    Read Post
                     <ArrowRight size={20} className="ml-2 group-hover:translate-x-2 transition-transform" />
                   </button>
                 </div>
@@ -106,11 +106,8 @@ const BlogSection = () => {
 
           {/* View All CTA */}
           <div className="text-center mt-12">
-            <a 
-              href="#" 
-              className="inline-flex items-center gap-2 text-lg font-semibold text-kenya-red hover:text-kenya-red-dark group"
-            >
-              View All Articles
+            <a href="/blogs" className="inline-flex items-center gap-2 text-lg font-semibold text-kenya-red hover:text-kenya-red-dark group">
+              View All Posts
               <ArrowRight className="group-hover:translate-x-2 transition-transform" size={20} />
             </a>
           </div>
