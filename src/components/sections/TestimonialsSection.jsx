@@ -5,21 +5,21 @@ import Card from '../ui/Card';
 const items = [
   {
     quote:
-      'The renewable energy training gave me a practical foundation and confidence to start contributing on real projects.',
-    name: 'Amina K.',
-    meta: 'Graduate Engineer • Nairobi',
+      'Gained critical insights on renewable energy and storage solutions. A truly insightful session from a leader in the field.',
+    name: 'Annete Githinji',
+    meta: 'Business Development & Fleet Consultant',
   },
   {
     quote:
-      'Clear, structured sessions. The risk engineering insights helped us standardize safety audits across sites.',
-    name: 'Joseph M.',
-    meta: 'Operations Manager • Manufacturing',
+      'An inspiring and transformative deep-dive into the entire renewable energy landscape. It significantly expanded my technical understanding.',
+    name: 'Calvince Omiti, MIEK, MIEEE',
+    meta: 'Graduate Electrical & Electronics Engineer',
   },
   {
     quote:
-      'Actionable guidance and relevant examples. Our team left aligned on best practices and responsibilities.',
-    name: 'Lydia N.',
-    meta: 'HSE Lead • Utilities',
+      'Provided valuable insights into integrating diverse renewable technologies to build a sustainable energy future.',
+    name: 'Engr. Danjuma, Kassam Henry,',
+    meta: 'Electrical Design & Project Engineer',
   },
 ];
 

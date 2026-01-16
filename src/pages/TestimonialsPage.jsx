@@ -4,46 +4,25 @@ import Card from '../components/ui/Card';
 
 const testimonials = [
   {
-    name: 'Amina K.',
-    role: 'Graduate Engineer',
-    company: 'Nairobi',
+    name: 'Annete Githinji',
+    role: 'Business Development & Fleet Consultant',
+    company: 'Independent',
     quote:
-      'The renewable energy training gave me a practical foundation and confidence to start contributing on real projects.',
+      'Gained critical insights on renewable energy and storage solutions. A truly insightful session from a leader in the field.',
   },
   {
-    name: 'Joseph M.',
-    role: 'Operations Manager',
-    company: 'Manufacturing',
+    name: 'Calvince Omiti, MIEK, MIEEE',
+    role: 'Graduate Electrical & Electronics Engineer',
+    company: 'Independent',
     quote:
-      'Clear, structured sessions. The risk engineering insights helped us standardize safety audits across sites.',
+      'An inspiring and transformative deep-dive into the entire renewable energy landscape. It significantly expanded my technical understanding.',
   },
   {
-    name: 'Lydia N.',
-    role: 'HSE Lead',
-    company: 'Utilities',
+    name: 'Engr. Danjuma, Kassam Henry, COREN®, NEMSA®',
+    role: 'Electrical Design & Project Engineer',
+    company: 'Independent',
     quote:
-      'Actionable guidance and relevant examples. Our team left aligned on best practices and responsibilities.',
-  },
-  {
-    name: 'Peter O.',
-    role: 'Project Engineer',
-    company: 'Energy Projects',
-    quote:
-      'Great balance between theory and case-based practice. Highly engaging and easy to apply on site.',
-  },
-  {
-    name: 'Ruth W.',
-    role: 'Maintenance Supervisor',
-    company: 'Industrial Plant',
-    quote:
-      'Support with thermal imaging helped us diagnose faults faster and reduce downtime.',
-  },
-  {
-    name: 'Daniel K.',
-    role: 'Insurance Analyst',
-    company: 'Risk & Reinsurance',
-    quote:
-      'Professional, responsive, and insightful. We look forward to enrolling in the advanced courses.',
+      'Provided valuable insights into integrating diverse renewable technologies to build a sustainable energy future.',
   },
 ];
 

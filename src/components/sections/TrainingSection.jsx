@@ -23,14 +23,14 @@ const TrainingSection = () => {
       color: 'green'
     },
     {
-      title: 'Hydropower Operations & Safety',
+      title: 'Hydropower Plant',
       audience: 'Operators, Safety Officers',
       duration: '3-4 Weeks',
       level: 'Professional',
       color: 'indigo'
     },
     {
-      title: 'Geothermal Systems Risk',
+      title: 'Geothermal Power Plant',
       audience: 'Insurers, Engineers',
       duration: '3 Weeks',
       level: 'Professional',
@@ -47,7 +47,7 @@ const TrainingSection = () => {
       color: 'emerald'
     },
     {
-      title: 'Thermal Power Plant Operations & Risk',
+      title: 'Thermal Power Plant',
       audience: 'Operators, Risk Engineers',
       duration: '4 Weeks',
       level: 'Advanced',
