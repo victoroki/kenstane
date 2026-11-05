@@ -11,6 +11,7 @@ const Button = ({
   as,
   href,
   to,
+  onClick,
   ...props 
 }) => {
   const baseStyles = "font-semibold rounded-xl transition-all transform inline-flex items-center justify-center";
@@ -40,6 +41,7 @@ const Button = ({
 
   const componentProps = {
     className: `${baseStyles} ${variants[variant]} ${sizes[size]} ${className}`,
+    onClick,
     ...props
   };
 

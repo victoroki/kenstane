@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Wind, Sun, ChevronRight, Download } from 'lucide-react';
 import { HERO_STATS } from '../../utils/constants';
 import Button from '../ui/Button';
+import { useNavigate } from 'react-router-dom';
 
 const CountUp = ({ end, duration = 2200, suffix = '' }) => {
   const [val, setVal] = useState(1);
@@ -31,6 +32,8 @@ const CountUp = ({ end, duration = 2200, suffix = '' }) => {
 };
 
 const VideoHeroSection = () => {
+  const navigate = useNavigate();
+
   return (
     <div>
       <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden">
@@ -92,15 +95,28 @@ const VideoHeroSection = () => {
               </p> */}
 
               {/* CTA Buttons */}
-              <div className="flex flex-col sm:flex-row gap-4 mb-24">
-                <Button variant="primary" icon={ChevronRight} iconPosition="right" as="a" href="/services">
+              <div className="flex flex-col sm:flex-row gap-4 mb-16">
+                <Button 
+                  variant="primary" 
+                  icon={ChevronRight} 
+                  iconPosition="right"
+                  onClick={() => navigate('/services')}
+                >
                   Explore Our Services
                 </Button>
-                <Button variant="secondary" as="a" href="#contact">
+                <Button 
+                  variant="secondary"
+                  onClick={() => navigate('/contact')}
+                >
                   Book Consultation
                 </Button>
-                <Button variant="red" icon={Download} iconPosition="left" as="a" href="#">
-                  Prospectus
+                <Button 
+                  variant="red" 
+                  icon={Download} 
+                  iconPosition="left"
+                  onClick={() => navigate('/risk-assessment')}
+                >
+                  Risk Assessment Tool
                 </Button>
               </div>
             </div>

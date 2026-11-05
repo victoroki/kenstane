@@ -15,6 +15,8 @@ import MediaPage from './pages/MediaPage';
 import EventsPage from './pages/EventsPage';
 import ContactPage from './pages/ContactPage';
 import TestimonialsPage from './pages/TestimonialsPage';
+import RiskAssessmentTool from './pages/RiskAssessmentTool';
+import NaturalPerilsPage from './pages/NaturalPerilsPage';
 
 function App() {
   return (
@@ -33,6 +35,8 @@ function App() {
           <Route path="/events" element={<EventsPage />} />
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/testimonials" element={<TestimonialsPage />} />
+          <Route path="/risk-assessment" element={<RiskAssessmentTool />} />
+          <Route path="/training/natural-perils-hazards" element={<NaturalPerilsPage />} />
         </Routes>
       </Layout>
     </Router>
