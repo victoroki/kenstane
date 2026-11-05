@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, ArrowRight, CheckCircle2 } from 'lucide-react';
 
 const CourseDetail = ({ course }) => {
   if (!course) return null;
@@ -8,21 +8,30 @@ const CourseDetail = ({ course }) => {
   return (
     <div className="bg-white">
       {/* Hero Section */}
-      <section className="bg-slate-900 text-white pt-10 pb-12">
+      <section className="bg-forest text-white pt-32 pb-12 md:pt-40">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
           {/* Breadcrumbs & Back Link */}
           <div className="mb-6 space-y-3">
-            <div className="text-slate-400 text-sm">
-              Home / Training / Courses / <span className="text-white">{course.title}</span>
-            </div>
+            <nav aria-label="Breadcrumb" className="text-white/60 text-sm">
+              <Link to="/" className="hover:text-white">Home</Link> /{' '}
+              <Link to="/training" className="hover:text-white">Training</Link> /{' '}
+              <span className="text-white" aria-current="page">{course.title}</span>
+            </nav>
             <Link to="/training" className="inline-flex items-center text-emerald-400 hover:text-emerald-300 text-sm font-semibold transition-colors">
               <ArrowLeft size={16} className="mr-2" />
               back to courses
             </Link>
           </div>
 
+          {course.isPast && (
+            <p className="mb-5 inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-1.5 text-sm font-semibold text-white ring-1 ring-white/20">
+              <CheckCircle2 size={16} aria-hidden="true" />
+              Completed course{course.completedLabel ? ` · ran ${course.completedLabel}` : ''}
+            </p>
+          )}
+
           {/* Title */}
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-12 leading-tight">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-12 leading-tight text-white">
             {course.title}
           </h1>
 
@@ -61,6 +70,24 @@ const CourseDetail = ({ course }) => {
           </div>
         </div>
       </section>
+
+      {course.isPast && (
+        <div className="border-b border-amber-200 bg-amber-50">
+          <div className="container mx-auto flex max-w-7xl flex-col gap-4 px-4 py-5 sm:px-6 md:flex-row md:items-center md:justify-between lg:px-8">
+            <p className="text-ink-800">
+              <span className="font-semibold">This course has already taken place</span>
+              {course.completedLabel ? ` (${course.completedLabel})` : ''}. Registration is closed — the details below are kept for reference.
+            </p>
+            <Link
+              to="/contact"
+              className="inline-flex shrink-0 items-center gap-2 rounded-lg bg-kenya-green px-5 py-2.5 text-[15px] font-semibold text-white hover:bg-kenya-green-dark transition-colors"
+            >
+              Register interest in the next run
+              <ArrowRight size={18} aria-hidden="true" />
+            </Link>
+          </div>
+        </div>
+      )}
 
       {/* Contact & CTA Bar */}
       <div className="bg-slate-100 border-b border-slate-200">
@@ -180,7 +207,7 @@ const CourseDetail = ({ course }) => {
             {/* Right Column - Sidebar */}
             <div className="w-full lg:w-[35%]">
               {course.trainer && (
-                <div className="bg-slate-50 border border-slate-200 rounded-lg overflow-hidden sticky top-8">
+                <div className="bg-slate-50 border border-slate-200 rounded-lg overflow-hidden sticky top-28">
                   <div className="bg-slate-100 border-b border-slate-200 px-6 py-4">
                     <h3 className="text-sm font-bold text-slate-500 uppercase tracking-widest">Trainer</h3>
                   </div>

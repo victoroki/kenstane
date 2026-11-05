@@ -2,6 +2,9 @@ import React from 'react';
 import SEO from '../components/SEO';
 import CourseDetail from '../components/sections/CourseDetail';
 import ParvezImg from '../assests/team/Parvez.png';
+import { COURSES, isCoursePast, formatCourseDates } from '../data/courses';
+
+const summary = COURSES.find((c) => c.link === '/training/natural-perils-hazards');
 
 const courseData = {
   title: 'Introduction to Natural Perils & Hazards',
@@ -86,7 +89,13 @@ export default function NaturalPerilsPage() {
         title="Introduction to Natural Perils & Hazards"
         description="Comprehensive training on natural perils and hazards for risk engineers, insurers, and industrial professionals. Understand hazard assessment, mitigation, and resilience."
       />
-      <CourseDetail course={courseData} />
+      <CourseDetail
+        course={{
+          ...courseData,
+          isPast: summary ? isCoursePast(summary) : false,
+          completedLabel: summary ? formatCourseDates(summary) : '',
+        }}
+      />
     </>
   );
 }

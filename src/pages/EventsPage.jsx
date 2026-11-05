@@ -13,6 +13,8 @@ import {
 } from 'lucide-react';
 import SEO from '../components/SEO';
 import { EVENTS, splitEvents, formatEventDate } from '../data/events';
+import { pastCourses } from '../data/courses';
+import PastCourseCard from '../components/sections/PastCourseCard';
 
 /* ---------- Lightbox ---------- */
 
@@ -304,6 +306,7 @@ export default function EventsPage() {
   const { upcoming, past } = useMemo(() => splitEvents(EVENTS), []);
   const featuredPast = past.filter((e) => e.featured && e.photos?.length);
   const otherPast = past.filter((e) => !(e.featured && e.photos?.length));
+  const courses = useMemo(() => pastCourses(), []);
 
   return (
     <>
@@ -334,7 +337,7 @@ export default function EventsPage() {
               Upcoming {upcoming.length > 0 && <span className="ml-1 text-white/60">({upcoming.length})</span>}
             </a>
             <a href="#past" className="rounded-full border border-white/25 px-4 py-2 hover:bg-white/10 transition-colors">
-              Past events <span className="ml-1 text-white/60">({past.length})</span>
+              Past events <span className="ml-1 text-white/60">({past.length + courses.length})</span>
             </a>
           </nav>
         </div>
@@ -391,6 +394,15 @@ export default function EventsPage() {
           {featuredPast.length > 0 && (
             <div className="mt-10 space-y-10">
               {featuredPast.map((e) => <FeaturedPastEvent key={e.id} event={e} />)}
+            </div>
+          )}
+
+          {courses.length > 0 && (
+            <div id="past-courses" className="mt-14 scroll-mt-28">
+              <h3 className="text-sm font-semibold uppercase tracking-[0.14em] text-ink-500 mb-6">Training courses</h3>
+              <div className="space-y-8">
+                {courses.map((c) => <PastCourseCard key={c.id} course={c} headingLevel="h4" />)}
+              </div>
             </div>
           )}
 

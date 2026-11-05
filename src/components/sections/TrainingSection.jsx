@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import { GraduationCap, Download, CheckCircle, Award, Clock, Users, Star, Zap, Shield, X, Loader, ExternalLink } from 'lucide-react';
 import { ENERGY_TYPES } from '../../utils/constants';
 import Button from '../ui/Button';
+import PastCourseCard from './PastCourseCard';
+import { COURSES, isCoursePast, pastCourses } from '../../data/courses';
 
 const FORMSPREE_URL = 'https://formspree.io/f/mgoqwone';
 
@@ -184,9 +186,14 @@ const TrainingSection = () => {
     }
   };
 
+  const pastCourseFor = (program) =>
+    program.link ? COURSES.find((c) => c.link === program.link && isCoursePast(c)) : null;
+
   const renderTrainingCards = (list) => (
     <div className="grid md:grid-cols-2 gap-6">
-      {list.map((program, idx) => (
+      {list.map((program, idx) => {
+        const past = pastCourseFor(program);
+        return (
         <div 
           key={idx} 
           className="group bg-white border border-slate-200 p-8 rounded-2xl transition-all duration-300 hover:border-emerald-300 hover:shadow-lg"
@@ -196,9 +203,15 @@ const TrainingSection = () => {
             <div className="w-14 h-14 bg-emerald-600 rounded-xl flex items-center justify-center">
               <GraduationCap size={28} className="text-white" strokeWidth={1.5} />
             </div>
-            <span className="bg-emerald-50 text-emerald-700 px-4 py-2 rounded-full text-sm font-semibold">
-              {program.level}
-            </span>
+            {past ? (
+              <span className="bg-ink-900 text-white px-4 py-2 rounded-full text-sm font-semibold">
+                Completed · {new Date(`${past.startDate}T00:00:00`).toLocaleDateString('en-GB', { month: 'long', year: 'numeric' })}
+              </span>
+            ) : (
+              <span className="bg-emerald-50 text-emerald-700 px-4 py-2 rounded-full text-sm font-semibold">
+                {program.level}
+              </span>
+            )}
           </div>
 
           {/* Content */}
@@ -220,7 +233,7 @@ const TrainingSection = () => {
           {/* CTA */}
           {program.link ? (
             <Link to={program.link} className="text-emerald-600 font-semibold flex items-center hover:gap-3 transition-all">
-              View Course Details
+              {past ? 'View past course details' : 'View Course Details'}
               <ExternalLink size={18} className="ml-2" />
             </Link>
           ) : (
@@ -230,14 +243,15 @@ const TrainingSection = () => {
             </button>
           )}
         </div>
-      ))}
+        );
+      })}
     </div>
   );
 
   return (
     <div className="bg-white">
       {/* Hero Section */}
-      <section className="relative py-20 md:py-28 bg-slate-50">
+      <section className="relative pt-36 pb-20 md:pt-44 md:pb-28 bg-slate-50">
         <div className="container mx-auto px-4 sm:px-6">
           <div className="max-w-4xl mx-auto text-center">
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-slate-900 mb-6 tracking-tight" style={{ lineHeight: '1.1' }}>
@@ -331,6 +345,22 @@ const TrainingSection = () => {
           )}
         </div>
       </section>
+
+      {/* Past courses */}
+      {pastCourses().length > 0 && (
+        <section id="past-courses" aria-labelledby="past-courses-title" className="scroll-mt-28 pb-20 md:pb-28">
+          <div className="container mx-auto px-4 sm:px-6 max-w-6xl">
+            <p className="eyebrow mb-3">Recently delivered</p>
+            <h2 id="past-courses-title" className="text-3xl md:text-4xl font-bold text-ink-950">Past courses</h2>
+            <p className="mt-3 max-w-2xl text-lg text-ink-600">
+              Courses we have already run. Register your interest and we’ll let you know when the next session is scheduled.
+            </p>
+            <div className="mt-10 space-y-8">
+              {pastCourses().map((c) => <PastCourseCard key={c.id} course={c} />)}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Membership Tiers */}
       <section className="py-20 md:py-28 bg-slate-50">

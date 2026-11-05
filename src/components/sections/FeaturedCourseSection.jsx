@@ -1,23 +1,17 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { GraduationCap, Users, Clock, Award, Calendar, MapPin, ExternalLink } from 'lucide-react';
+import { upcomingCourses, formatCourseDates } from '../../data/courses';
 
-const course = {
-  title: 'Introduction to Natural Perils & Hazards',
-  audience: 'Risk Engineers, Insurers, HSE Personnel',
-  duration: '3 Days',
-  level: 'Professional',
-  topic: 'Risk Engineering & Natural Hazard Awareness',
-  location: 'Nairobi, Kenya / Online',
-  startDate: '15 July 2026',
-  cpdHours: '9',
-  price: 'Member USD 55 / Non-member USD 66',
-  trainer: 'Parvez Karim Butt',
-  description: 'Comprehensive training on identifying, assessing, and managing natural hazard risks across the project lifecycle. Covers earthquakes, floods, storms, wildfires, and climate-related risks with real-world case studies.',
-  link: '/training/natural-perils-hazards'
-};
 
+// Only an upcoming course is featured on the home page. Once a course has run it
+// moves to "Past courses" on the Training page and to Past events, so this
+// section hides itself until the next course is added to src/data/courses.js.
 const FeaturedCourseSection = () => {
+  const next = upcomingCourses()[0];
+  if (!next) return null;
+  const course = { ...next, startDate: formatCourseDates(next) };
+
   return (
     <section className="py-20 md:py-28 bg-gradient-to-br from-slate-50 to-white overflow-hidden">
       <div className="container mx-auto px-4 sm:px-6">
