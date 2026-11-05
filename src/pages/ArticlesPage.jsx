@@ -11,7 +11,7 @@ export default function ArticlesPage() {
         title="Technical Articles" 
         description="Explore in-depth technical articles and write-ups on power systems, renewable energy, and risk engineering by Kenstane Energy."
       />
-      <section className="py-24 bg-gradient-to-b from-slate-50 to-white">
+      <section className="pt-36 pb-24 md:pt-44 bg-gradient-to-b from-slate-50 to-white">
       <div className="container mx-auto px-6">
         <SectionHeader title="Articles" subtitle="Long-form perspectives and technical write-ups" />
 

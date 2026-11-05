@@ -7,14 +7,21 @@ const Layout = ({ children }) => {
   const location = useLocation();
 
   useEffect(() => {
+    if (location.hash) {
+      const el = document.getElementById(location.hash.slice(1));
+      if (el) {
+        el.scrollIntoView();
+        return;
+      }
+    }
     window.scrollTo(0, 0);
-  }, [location.pathname]);
+  }, [location.pathname, location.hash]);
 
   return (
-    <div className="min-h-screen bg-white text-slate-800">
+    <div className="min-h-screen bg-white text-ink-800">
       <Navigation />
       
-      <main className="w-full">
+      <main id="main" className="w-full">
         {children}
       </main>
       

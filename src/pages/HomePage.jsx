@@ -4,6 +4,7 @@ import HeroSection from '../components/sections/HeroSection';
 import FeaturedCourseSection from '../components/sections/FeaturedCourseSection';
 import MembershipSection from '../components/sections/MembershipSection';
 import TestimonialsSection from '../components/sections/TestimonialsSection';
+import RecentEventSection from '../components/sections/RecentEventSection';
 
 export default function HomePage() {
   return (
@@ -14,6 +15,7 @@ export default function HomePage() {
       />
       <HeroSection />
       <FeaturedCourseSection />
+      <RecentEventSection />
       <MembershipSection />
       <TestimonialsSection />
     </>

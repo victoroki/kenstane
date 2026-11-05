@@ -6,16 +6,16 @@ const Card = ({
   hover = true,
   className = '' 
 }) => {
-  const baseStyles = "rounded-2xl transition-all";
+  const baseStyles = "rounded-2xl transition-[box-shadow,transform,border-color] duration-300";
   
   const variants = {
-    default: "bg-white border border-slate-200 p-8",
-    gradient: "bg-gradient-to-br from-white to-slate-50 p-8 border border-slate-100",
+    default: "bg-white border border-ink-200 p-8 shadow-soft",
+    gradient: "bg-ink-50 p-8 border border-ink-100",
     glass: "bg-white/80 backdrop-blur-md border border-white/50 p-8",
     colored: "p-8"
   };
   
-  const hoverEffect = hover ? "hover:shadow-2xl hover:-translate-y-2 cursor-pointer" : "";
+  const hoverEffect = hover ? "hover:shadow-lift hover:-translate-y-1" : "";
   
   return (
     <div className={`${baseStyles} ${variants[variant]} ${hoverEffect} ${className}`}>
@@ -69,4 +69,4 @@ export const ServiceCard = ({
   );
 };
 
-export default Card;
+export default Card;
