@@ -1,93 +1,173 @@
 import React from 'react';
-import { Shield, CheckCircle, Building2 } from 'lucide-react';
+import { Shield, Search, ClipboardCheck, FileText, Building2, HardHat, ArrowRight, Phone } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { RISK_SERVICES } from '../../utils/constants';
-import SectionHeader from '../ui/SectionHeader';
+import riskBg from '../../assests/risk_assesnt.webp';
+
+const services = [
+  {
+    icon: Search,
+    title: 'Site Surveys',
+    description: 'Comprehensive on-site risk assessments of power plants, industrial facilities, and infrastructure projects to identify hazards and evaluate existing controls.'
+  },
+  {
+    icon: ClipboardCheck,
+    title: 'Mining Assessments',
+    description: 'Specialised risk evaluation for mining operations covering equipment, ground stability, processing facilities, and operational safety protocols.'
+  },
+  {
+    icon: Building2,
+    title: 'Property Inspections',
+    description: 'Detailed commercial and industrial property inspections for insurance underwriting, loss prevention, and asset integrity management.'
+  },
+  {
+    icon: HardHat,
+    title: 'Oil & Gas Evaluations',
+    description: 'Risk assessment across upstream, midstream, and downstream operations including refineries, pipelines, storage terminals, and processing facilities.'
+  }
+];
+
+const process = [
+  {
+    step: '01',
+    title: 'Scoping',
+    description: 'Define the scope, objectives, and key risk areas specific to your facility and operational context.'
+  },
+  {
+    step: '02',
+    title: 'Site Assessment',
+    description: 'On-site inspection and data collection by experienced risk engineers using industry-standard methodologies.'
+  },
+  {
+    step: '03',
+    title: 'Analysis',
+    description: 'Quantitative and qualitative risk analysis including PML/EML estimation, hazard identification, and vulnerability assessment.'
+  },
+  {
+    step: '04',
+    title: 'Reporting',
+    description: 'Clear, actionable reports with prioritised recommendations, risk ratings, and mitigation strategies tailored to your needs.'
+  }
+];
 
 const RiskEngineeringSection = () => {
   return (
-    <section id="risk-engineering" className="py-24 bg-gradient-to-b from-slate-50 to-white">
-      <div className="container mx-auto px-6">
-        <SectionHeader 
-          title="Risk Engineering Services"
-          subtitle="Expert guidance across the project lifecycle supporting energy companies, power plant operators, and institutions with actionable insights and customized solutions"
-        />
-
-        <div className="max-w-6xl mx-auto">
-          {/* Services Grid */}
-          <div className="grid md:grid-cols-2 gap-6 mb-16">
-            {RISK_SERVICES.map((service, idx) => (
-              <div 
-                key={idx} 
-                className="group flex items-start space-x-4 bg-white p-6 rounded-2xl border-2 border-slate-100 hover:border-kenya-green hover:shadow-xl transition-all animate-fade-in-up"
-                style={{ animationDelay: `${idx * 0.1}s` }}
-              >
-                <div className="flex-shrink-0">
-                  <CheckCircle className="text-kenya-green group-hover:scale-110 transition-transform" size={24} />
-                </div>
-                <span className="text-slate-700 font-medium group-hover:text-kenya-green transition-colors">
-                  {service}
-                </span>
-              </div>
-            ))}
-          </div>
-
-          {/* Comprehensive Solutions Highlight */}
-          <div className="relative bg-gradient-to-br from-kenya-black via-kenya-red to-kenya-green text-white p-12 rounded-3xl overflow-hidden shadow-2xl">
-            {/* Background Decoration */}
-            <div className="absolute inset-0 opacity-10">
-              <div className="absolute top-0 right-0 w-96 h-96 bg-white rounded-full blur-3xl"></div>
-              <div className="absolute bottom-0 left-0 w-64 h-64 bg-white rounded-full blur-3xl"></div>
-            </div>
-
-            <div className="relative z-10">
-              <h3 className="text-4xl font-bold mb-8">Comprehensive Risk Solutions</h3>
-              
-              <div className="grid md:grid-cols-2 gap-8 mb-10">
-                {[
-                  { icon: Shield, title: "Site Surveys", desc: "Comprehensive on-site risk assessments and safety audits" },
-                  { icon: Building2, title: "Reinstatement of Property", desc: "Assessment and guidance for property reinstatement and restoration" }
-                ].map((item, idx) => (
-                  <div 
-                    key={idx} 
-                    className="text-center group hover:transform hover:scale-105 transition-all"
-                  >
-                    <div className="w-20 h-20 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:bg-white/30 transition-all">
-                      <item.icon size={40} />
-                    </div>
-                    <h4 className="font-bold text-xl mb-3">{item.title}</h4>
-                    <p className="text-gray-100 text-sm leading-relaxed">{item.desc}</p>
-                  </div>
-                ))}
-              </div>
-
-              {/* Additional features removed per request */}
-            </div>
-          </div>
-
-          {/* CTA Section */}
-          <div className="mt-16 text-center">
-            <h3 className="text-3xl font-bold text-slate-900 mb-4">Need a Risk Assessment?</h3>
-            <p className="text-slate-600 mb-8 max-w-2xl mx-auto">
-              Our certified risk engineers are ready to help you identify, assess, and mitigate risks in your power generation projects.
+    <div>
+      <section className="relative pt-32 pb-20 md:pt-40 md:pb-28 overflow-hidden">
+        <div className="absolute inset-0">
+          <img
+            src={riskBg}
+            alt=""
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-white/85"></div>
+        </div>
+        <div className="container mx-auto px-4 sm:px-6 relative">
+          <div className="max-w-3xl">
+            <p className="text-emerald-600 font-semibold text-sm tracking-wider uppercase mb-4">
+              Services
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <a 
-                href="/contact" 
-                className="bg-gradient-to-r from-kenya-red to-kenya-red-dark text-white px-10 py-4 rounded-xl font-semibold hover:shadow-2xl hover:shadow-red-500/50 transition-all transform hover:scale-105 inline-flex items-center justify-center"
-              >
-                Request a Quote
-              </a>
-              {/* <a 
-                href="#" 
-                className="bg-white border-2 border-kenya-green text-kenya-green px-10 py-4 rounded-xl font-semibold hover:bg-green-50 transition-all transform hover:scale-105 inline-flex items-center justify-center shadow-lg"
-              >
-                View Case Studies
-              </a> */}
+            <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-slate-900 mb-6 tracking-tight">
+              Risk Engineering
+            </h1>
+            <p className="text-xl text-slate-600 leading-relaxed max-w-2xl">
+              Expert risk assessment and loss prevention services for the power generation, mining, oil & gas, and industrial sectors across Africa.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section className="py-20 md:py-28">
+        <div className="container mx-auto px-4 sm:px-6">
+          <div className="max-w-6xl mx-auto">
+            <div className="text-center mb-14">
+              <h2 className="text-3xl font-bold text-slate-900 mb-3">What We Offer</h2>
+              <div className="w-20 h-1 bg-emerald-600 rounded-full mx-auto mb-6"></div>
+              <p className="text-slate-500 text-lg max-w-2xl mx-auto">
+                Our certified risk engineers bring decades of operational and insurance industry experience to every engagement.
+              </p>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-x-12 gap-y-10">
+              {services.map((service, idx) => (
+                <div key={idx} className="group flex gap-5">
+                  <div className="w-12 h-12 bg-slate-100 rounded-xl flex items-center justify-center flex-shrink-0 mt-1 group-hover:bg-emerald-100 transition-colors">
+                    <service.icon size={22} className="text-slate-600 group-hover:text-emerald-600 transition-colors" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-bold text-slate-900 mb-2">{service.title}</h3>
+                    <p className="text-slate-600 leading-relaxed">{service.description}</p>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
+
+      <section className="py-20 md:py-28 bg-slate-50">
+        <div className="container mx-auto px-4 sm:px-6">
+          <div className="max-w-6xl mx-auto">
+            <div className="text-center mb-14">
+              <h2 className="text-3xl font-bold text-slate-900 mb-3">Our Approach</h2>
+              <div className="w-20 h-1 bg-emerald-600 rounded-full mx-auto mb-6"></div>
+              <p className="text-slate-500 text-lg max-w-2xl mx-auto">
+                A structured, methodical process that delivers clear outcomes.
+              </p>
+            </div>
+
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {process.map((item, idx) => (
+                <div key={idx} className="relative">
+                  <div className="bg-white p-8 rounded-2xl border border-slate-200 h-full">
+                    <span className="text-4xl font-bold text-slate-200 block mb-4">{item.step}</span>
+                    <h3 className="text-lg font-bold text-slate-900 mb-3">{item.title}</h3>
+                    <p className="text-slate-600 text-sm leading-relaxed">{item.description}</p>
+                  </div>
+                  {idx < process.length - 1 && (
+                    <div className="hidden lg:block absolute top-1/2 -right-4 text-slate-300">
+                      <ArrowRight size={20} />
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="py-20 md:py-28">
+        <div className="container mx-auto px-4 sm:px-6">
+          <div className="max-w-4xl mx-auto text-center">
+            <div className="w-16 h-16 bg-slate-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
+              <Shield size={32} className="text-emerald-600" />
+            </div>
+            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">
+              Need a Risk Assessment?
+            </h2>
+            <p className="text-lg text-slate-600 mb-10 max-w-2xl mx-auto">
+              Our team is ready to help you identify, assess, and mitigate risks across your energy and industrial projects.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Link
+                to="/contact"
+                className="inline-flex items-center justify-center gap-2 bg-slate-900 text-white px-8 py-4 rounded-xl font-semibold hover:bg-slate-800 transition-all"
+              >
+                Request a Quote
+                <ArrowRight size={18} />
+              </Link>
+              <a
+                href="tel:+254793041411"
+                className="inline-flex items-center justify-center gap-2 border border-slate-300 text-slate-700 px-8 py-4 rounded-xl font-semibold hover:border-slate-900 hover:text-slate-900 transition-all"
+              >
+                <Phone size={18} />
+                +254 793 041 411
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
   );
 };
 

@@ -1,5 +1,5 @@
-import { 
-  Wind, Zap, Shield, Users, BookOpen, Award, 
+import {
+  Wind, Zap, Shield, Users, BookOpen, Award,
   Sun, Droplet, Building2, GraduationCap,
   Factory, Wrench, Lightbulb, Heart, Handshake, Briefcase, Target,
   Flame, Gem
@@ -10,14 +10,14 @@ export const COMPANY_INFO = {
   name: "Kenstane Energy Ltd",
   tagline: "ENERGY LIMITED",
   phone: "+254 793 041 411",
-  email: "info@kenstaneltd.co.ke",
-  website: "kenstaneenergyltd.co.ke",
+  email: "info@kenstaneenergy.co.ke",
+  website: "kenstaneenergy.co.ke",
   location: "Kiambu, Kenya"
 };
 
 // Navigation Items
 export const NAV_ITEMS = [
-  'Home', 'About', 'Training', 'Risk Engineering', 
+  'Home', 'About', 'Training', 'Risk Engineering',
   'Sectors', 'Resources', 'Case Studies', 'Blog', 'Contact'
 ];
 
@@ -30,63 +30,63 @@ export const HERO_STATS = [
 
 // Core Values
 export const CORE_VALUES = [
-  { 
-    icon: Shield, 
-    title: "Integrity", 
-    desc: "Ethical standards in all operations", 
-    color: "from-blue-500 to-indigo-500" 
+  {
+    icon: Shield,
+    title: "Integrity",
+    desc: "Ethical standards in all operations",
+    color: "from-blue-500 to-indigo-500"
   },
-  { 
-    icon: Lightbulb, 
-    title: "Innovation", 
-    desc: "Pioneering energy solutions", 
-    color: "from-amber-500 to-orange-500" 
+  {
+    icon: Lightbulb,
+    title: "Innovation",
+    desc: "Pioneering energy solutions",
+    color: "from-amber-500 to-orange-500"
   },
-  { 
-    icon: Handshake, 
-    title: "Collaboration", 
-    desc: "Strategic partnerships", 
-    color: "from-emerald-500 to-teal-500" 
+  {
+    icon: Handshake,
+    title: "Collaboration",
+    desc: "Strategic partnerships",
+    color: "from-emerald-500 to-teal-500"
   },
-  { 
-    icon: Award, 
-    title: "Excellence", 
-    desc: "World-class service delivery", 
-    color: "from-purple-500 to-pink-500" 
+  {
+    icon: Award,
+    title: "Excellence",
+    desc: "World-class service delivery",
+    color: "from-purple-500 to-pink-500"
   },
-  { 
-    icon: Heart, 
-    title: "Sustainability", 
-    desc: "Environmental stewardship", 
-    color: "from-green-500 to-emerald-500" 
+  {
+    icon: Heart,
+    title: "Sustainability",
+    desc: "Environmental stewardship",
+    color: "from-green-500 to-emerald-500"
   },
-  { 
-    icon: Target, 
-    title: "Professionalism", 
-    desc: "Highest industry standards", 
-    color: "from-cyan-500 to-blue-500" 
+  {
+    icon: Target,
+    title: "Professionalism",
+    desc: "Highest industry standards",
+    color: "from-cyan-500 to-blue-500"
   }
 ];
 
 // Services
 export const SERVICES = [
-  { 
-    icon: BookOpen, 
-    title: "Training", 
+  {
+    icon: BookOpen,
+    title: "Training",
     desc: "Specialized programs for graduates, 2-5 year professionals, and managers in CCGT, Solar, Wind, HSE, and CEng pathways",
     color: "from-emerald-500 to-teal-500",
     link: "/training"
   },
-  { 
-    icon: Shield, 
-    title: "Risk Engineering", 
+  {
+    icon: Shield,
+    title: "Risk Engineering",
     desc: "Comprehensive site surveys, QRA, PML/EML assessment, and thermal drone inspections",
     color: "from-blue-500 to-indigo-500",
     link: "/risk-engineering"
   },
-  { 
-    icon: Briefcase, 
-    title: "Consultancy Services", 
+  {
+    icon: Briefcase,
+    title: "Consultancy Services",
     desc: "Fire Protection & Detection: Design, installation, and maintenance of fire suppression and detection systems",
     color: "from-red-500 to-orange-500",
     link: "/contact"
@@ -137,6 +137,13 @@ export const TRAINING_PROGRAMS = [
     duration: "2-4 Weeks",
     level: "Professional",
     color: "purple"
+  },
+  {
+    title: "Introduction to Natural Perils & Hazards",
+    audience: "Risk Engineers, Insurers, HSE Personnel",
+    duration: "3 Days",
+    level: "Professional",
+    color: "orange"
   }
 ];
 
@@ -150,27 +157,27 @@ export const RISK_SERVICES = [
 
 // Sectors We Serve
 export const SECTORS = [
-  { 
-    icon: Factory, 
-    name: "Power Generation", 
+  {
+    icon: Factory,
+    name: "Power Generation",
     desc: "CCGT, Hydro, Solar, Wind",
     color: "from-emerald-500 to-teal-500"
   },
-  { 
-    icon: Building2, 
-    name: "Insurance & Reinsurance", 
+  {
+    icon: Building2,
+    name: "Insurance & Reinsurance",
     desc: "Risk Assessment & Advisory",
     color: "from-blue-500 to-indigo-500"
   },
-  { 
-    icon: Wrench, 
-    name: "Engineering Consultancies", 
+  {
+    icon: Wrench,
+    name: "Engineering Consultancies",
     desc: "Technical Support Services",
     color: "from-amber-500 to-orange-500"
   },
-  { 
-    icon: GraduationCap, 
-    name: "Universities", 
+  {
+    icon: GraduationCap,
+    name: "Universities",
     desc: "Academic Partnerships",
     color: "from-purple-500 to-pink-500"
   },

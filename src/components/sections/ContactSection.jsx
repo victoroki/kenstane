@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { Phone, Mail, MapPin, Send, CheckCircle } from 'lucide-react';
-import SectionHeader from '../ui/SectionHeader';
-import { FadeIn, SlideInLeft, SlideInRight } from '../animations/AnimatedElements';
+import { Phone, Mail, MapPin, Send, CheckCircle, Loader } from 'lucide-react';
+
+const FORMSPREE_URL = 'https://formspree.io/f/mgoqwone';
 
 const ContactSection = () => {
   const [formData, setFormData] = useState({
@@ -13,6 +13,7 @@ const ContactSection = () => {
   });
 
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleChange = (e) => {
     setFormData({
@@ -21,21 +22,47 @@ const ContactSection = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Form submitted:', formData);
-    setIsSubmitted(true);
-    
-    setTimeout(() => {
-      setIsSubmitted(false);
-      setFormData({
-        name: '',
-        email: '',
-        phone: '',
-        subject: '',
-        message: ''
+    setIsLoading(true);
+
+    try {
+      const response = await fetch(FORMSPREE_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          subject: formData.subject,
+          message: formData.message
+        })
       });
-    }, 3000);
+
+      if (response.ok) {
+        setIsSubmitted(true);
+        setFormData({
+          name: '',
+          email: '',
+          phone: '',
+          subject: '',
+          message: ''
+        });
+        
+        setTimeout(() => {
+          setIsSubmitted(false);
+        }, 3000);
+      } else {
+        throw new Error('Form submission failed');
+      }
+    } catch (error) {
+      console.error('Email send failed:', error);
+      alert('Failed to send message. Please try again or email us directly.');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const contactInfo = [
@@ -66,23 +93,34 @@ const ContactSection = () => {
   ];
 
   return (
-    <section id="contact" className="py-24 bg-gradient-to-b from-white to-slate-50">
-      <div className="container mx-auto px-6">
-        <SectionHeader 
-          title="Get In Touch"
-          subtitle="Ready to transform your career? Let's discuss how we can help you achieve your goals"
-        />
+    <div className="bg-white">
+      {/* Hero Section */}
+      <section className="relative py-20 md:py-28 bg-slate-50">
+        <div className="container mx-auto px-4 sm:px-6">
+          <div className="max-w-4xl mx-auto text-center">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-slate-900 mb-6 tracking-tight" style={{ lineHeight: '1.1' }}>
+              Get In Touch
+            </h1>
+            <div className="w-20 h-1 bg-emerald-600 rounded-full mx-auto mb-8"></div>
+            <p className="text-xl md:text-2xl text-slate-600 leading-relaxed max-w-3xl mx-auto">
+              Ready to transform your career? Let's discuss how we can help you achieve your goals
+            </p>
+          </div>
+        </div>
+      </section>
 
-        <div className="max-w-7xl mx-auto">
-          <div className="grid lg:grid-cols-2 gap-12">
-            {/* Contact Information */}
-            <SlideInLeft>
+      {/* Contact Content */}
+      <section className="py-20 md:py-28">
+        <div className="container mx-auto px-4 sm:px-6">
+          <div className="max-w-7xl mx-auto">
+            <div className="grid lg:grid-cols-2 gap-12 lg:gap-16">
+              {/* Contact Information */}
               <div className="space-y-8">
                 <div>
-                  <h3 className="text-3xl font-bold text-slate-900 mb-4">
+                  <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4" style={{ lineHeight: '1.2' }}>
                     Let's Start a Conversation
-                  </h3>
-                  <p className="text-slate-600 leading-relaxed mb-8">
+                  </h2>
+                  <p className="text-lg text-slate-600 leading-relaxed">
                     Whether you're looking to upskill your team, need risk engineering support, 
                     or want to learn more about our programs, we're here to help.
                   </p>
@@ -91,69 +129,58 @@ const ContactSection = () => {
                 {/* Contact Cards */}
                 <div className="space-y-4">
                   {contactInfo.map((info, idx) => (
-                    <FadeIn key={idx} delay={idx * 0.1}>
-                      <div className="group bg-white p-6 rounded-2xl border-2 border-slate-100 hover:border-kenya-green hover:shadow-xl transition-all">
-                        <div className="flex items-start space-x-4">
-                          <div className="w-14 h-14 bg-gradient-to-br from-kenya-green to-kenya-green-dark rounded-xl flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
-                            <info.icon className="text-white" size={24} />
-                          </div>
-                          <div className="flex-1">
-                            <h4 className="font-bold text-slate-900 text-lg mb-1">
-                              {info.title}
-                            </h4>
-                            {info.link ? (
-                              <a 
-                                href={info.link}
-                                className="text-slate-600 hover:text-kenya-green transition-colors"
-                              >
-                                {info.detail}
-                              </a>
-                            ) : (
-                              <p className="text-slate-600">{info.detail}</p>
-                            )}
-                          </div>
+                    <div 
+                      key={idx} 
+                      className="group bg-white p-6 rounded-2xl border border-slate-200 hover:border-emerald-300 hover:shadow-lg transition-all"
+                    >
+                      <div className="flex items-start gap-4">
+                        <div className="w-12 h-12 bg-emerald-600 rounded-xl flex items-center justify-center flex-shrink-0">
+                          <info.icon className="text-white" size={24} strokeWidth={1.5} />
+                        </div>
+                        <div className="flex-1">
+                          <h3 className="font-bold text-slate-900 text-lg mb-1">
+                            {info.title}
+                          </h3>
+                          {info.link ? (
+                            <a 
+                              href={info.link}
+                              className="text-slate-600 hover:text-emerald-600 transition-colors"
+                            >
+                              {info.detail}
+                            </a>
+                          ) : (
+                            <p className="text-slate-600">{info.detail}</p>
+                          )}
                         </div>
                       </div>
-                    </FadeIn>
+                    </div>
                   ))}
                 </div>
 
                 {/* Business Hours */}
-                <FadeIn delay={0.4}>
-                  <div className="bg-gradient-to-br from-green-50 to-emerald-50 p-6 rounded-2xl border-2 border-kenya-green">
-                    <h4 className="font-bold text-slate-900 text-lg mb-3">
-                      Business Hours
-                    </h4>
-                    <div className="space-y-2 text-slate-700">
-                      <div className="flex justify-between">
-                        <span>Monday - Friday:</span>
-                        <span className="font-semibold">8:00 AM - 5:00 PM</span>
-                      </div>
-                      {/* <div className="flex justify-between">
-                        <span>Saturday:</span>
-                        <span className="font-semibold">9:00 AM - 1:00 PM</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span>Sunday:</span>
-                        <span className="font-semibold">Closed</span>
-                      </div> */}
+                <div className="bg-slate-50 p-6 rounded-2xl border border-slate-200">
+                  <h3 className="font-bold text-slate-900 text-lg mb-3">
+                    Business Hours
+                  </h3>
+                  <div className="space-y-2 text-slate-700">
+                    <div className="flex justify-between">
+                      <span>Monday - Friday:</span>
+                      <span className="font-semibold">8:00 AM - 5:00 PM</span>
                     </div>
                   </div>
-                </FadeIn>
+                </div>
               </div>
-            </SlideInLeft>
 
-            {/* Contact Form */}
-            <SlideInRight>
-              <div className="bg-white p-8 rounded-3xl shadow-xl border-2 border-slate-100">
+              {/* Contact Form */}
+              <div className="bg-white p-8 md:p-10 rounded-2xl border border-slate-200">
                 <h3 className="text-2xl font-bold text-slate-900 mb-6">
                   Send Us a Message
                 </h3>
 
                 {isSubmitted ? (
                   <div className="flex flex-col items-center justify-center py-12">
-                    <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mb-4">
-                      <CheckCircle className="text-kenya-green" size={40} />
+                    <div className="w-20 h-20 bg-emerald-50 rounded-full flex items-center justify-center mb-4">
+                      <CheckCircle className="text-emerald-600" size={40} strokeWidth={1.5} />
                     </div>
                     <h4 className="text-2xl font-bold text-slate-900 mb-2">
                       Message Sent!
@@ -163,7 +190,7 @@ const ContactSection = () => {
                     </p>
                   </div>
                 ) : (
-                  <div className="space-y-5">
+                  <form onSubmit={handleSubmit} className="space-y-5">
                     <div>
                       <label className="block text-sm font-semibold text-slate-700 mb-2">
                         Full Name *
@@ -175,7 +202,7 @@ const ContactSection = () => {
                         onChange={handleChange}
                         required
                         placeholder="John Doe"
-                        className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-kenya-green focus:border-transparent transition-all"
+                        className="w-full px-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-600 focus:border-transparent transition-all"
                       />
                     </div>
 
@@ -191,7 +218,7 @@ const ContactSection = () => {
                           onChange={handleChange}
                           required
                           placeholder="john@example.com"
-                          className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-kenya-green focus:border-transparent transition-all"
+                          className="w-full px-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-600 focus:border-transparent transition-all"
                         />
                       </div>
 
@@ -205,7 +232,7 @@ const ContactSection = () => {
                           value={formData.phone}
                           onChange={handleChange}
                           placeholder="+254 700 000 000"
-                          className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-kenya-green focus:border-transparent transition-all"
+                          className="w-full px-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-600 focus:border-transparent transition-all"
                         />
                       </div>
                     </div>
@@ -219,7 +246,7 @@ const ContactSection = () => {
                         value={formData.subject}
                         onChange={handleChange}
                         required
-                        className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-kenya-green focus:border-transparent transition-all"
+                        className="w-full px-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-600 focus:border-transparent transition-all"
                       >
                         <option value="">Select a subject</option>
                         <option value="training">Training Programs</option>
@@ -241,25 +268,35 @@ const ContactSection = () => {
                         required
                         placeholder="Tell us how we can help you..."
                         rows="5"
-                        className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-600 focus:border-transparent transition-all resize-none"
+                        className="w-full px-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-600 focus:border-transparent transition-all resize-none"
                       />
                     </div>
 
                     <button
-                      onClick={handleSubmit}
-                      className="w-full bg-gradient-to-r from-kenya-green to-kenya-green-light text-white py-4 rounded-xl font-bold hover:from-kenya-green-dark hover:to-kenya-green transition-all flex items-center justify-center group shadow-lg hover:shadow-xl"
+                      type="submit"
+                      disabled={isLoading}
+                      className="w-full bg-emerald-600 text-white py-4 rounded-xl font-semibold hover:bg-emerald-700 transition-all flex items-center justify-center gap-2 shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                      <span>Send Message</span>
-                      <Send size={20} className="ml-2 group-hover:translate-x-1 transition-transform" />
+                      {isLoading ? (
+                        <>
+                          <Loader size={20} className="animate-spin" />
+                          <span>Sending...</span>
+                        </>
+                      ) : (
+                        <>
+                          <span>Send Message</span>
+                          <Send size={20} />
+                        </>
+                      )}
                     </button>
-                  </div>
+                  </form>
                 )}
               </div>
-            </SlideInRight>
+            </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </div>
   );
 };
 

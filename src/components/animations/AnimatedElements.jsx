@@ -16,13 +16,14 @@ export const FadeIn = ({ children, delay = 0, duration = 0.6, className = '' }) 
       { threshold: 0.1 }
     );
 
-    if (ref.current) {
-      observer.observe(ref.current);
+    const currentRef = ref.current;
+    if (currentRef) {
+      observer.observe(currentRef);
     }
 
     return () => {
-      if (ref.current) {
-        observer.unobserve(ref.current);
+      if (currentRef) {
+        observer.unobserve(currentRef);
       }
     };
   }, []);
@@ -59,13 +60,14 @@ export const SlideInLeft = ({ children, delay = 0, duration = 0.6, className = '
       { threshold: 0.1 }
     );
 
-    if (ref.current) {
-      observer.observe(ref.current);
+    const currentRef = ref.current;
+    if (currentRef) {
+      observer.observe(currentRef);
     }
 
     return () => {
-      if (ref.current) {
-        observer.unobserve(ref.current);
+      if (currentRef) {
+        observer.unobserve(currentRef);
       }
     };
   }, []);
@@ -102,13 +104,14 @@ export const SlideInRight = ({ children, delay = 0, duration = 0.6, className = 
       { threshold: 0.1 }
     );
 
-    if (ref.current) {
-      observer.observe(ref.current);
+    const currentRef = ref.current;
+    if (currentRef) {
+      observer.observe(currentRef);
     }
 
     return () => {
-      if (ref.current) {
-        observer.unobserve(ref.current);
+      if (currentRef) {
+        observer.unobserve(currentRef);
       }
     };
   }, []);
@@ -145,13 +148,14 @@ export const ScaleUp = ({ children, delay = 0, duration = 0.6, className = '' })
       { threshold: 0.1 }
     );
 
-    if (ref.current) {
-      observer.observe(ref.current);
+    const currentRef = ref.current;
+    if (currentRef) {
+      observer.observe(currentRef);
     }
 
     return () => {
-      if (ref.current) {
-        observer.unobserve(ref.current);
+      if (currentRef) {
+        observer.unobserve(currentRef);
       }
     };
   }, []);
@@ -201,13 +205,14 @@ export const AnimatedCounter = ({ target, duration = 2000, suffix = '', prefix =
       { threshold: 0.1 }
     );
 
-    if (ref.current) {
-      observer.observe(ref.current);
+    const currentRef = ref.current;
+    if (currentRef) {
+      observer.observe(currentRef);
     }
 
     return () => {
-      if (ref.current) {
-        observer.unobserve(ref.current);
+      if (currentRef) {
+        observer.unobserve(currentRef);
       }
     };
   }, [isVisible]);
@@ -221,7 +226,7 @@ export const AnimatedCounter = ({ target, duration = 2000, suffix = '', prefix =
     const animate = (currentTime) => {
       if (!startTime) startTime = currentTime;
       const progress = Math.min((currentTime - startTime) / duration, 1);
-      
+
       setCount(Math.floor(progress * targetNum));
 
       if (progress < 1) {
@@ -269,13 +274,14 @@ export const RevealOnScroll = ({ children, className = '', revealClass = 'reveal
       { threshold: 0.1 }
     );
 
-    if (ref.current) {
-      observer.observe(ref.current);
+    const currentRef = ref.current;
+    if (currentRef) {
+      observer.observe(currentRef);
     }
 
     return () => {
-      if (ref.current) {
-        observer.unobserve(ref.current);
+      if (currentRef) {
+        observer.unobserve(currentRef);
       }
     };
   }, []);
@@ -330,7 +336,7 @@ export const Pulse = ({ children, className = '' }) => {
   );
 };
 
-export default {
+const AnimatedElements = {
   FadeIn,
   SlideInLeft,
   SlideInRight,
@@ -342,3 +348,5 @@ export default {
   Parallax,
   Pulse,
 };
+
+export default AnimatedElements;

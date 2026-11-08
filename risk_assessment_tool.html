@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Multi-Peril Risk Assessment Tool</title>
+<style>
+  :root {
+    --bg: #0f1117;
+    --surface: #1a1d27;
+    --surface2: #22263a;
+    --border: #2e3250;
+    --accent: #4f7cff;
+    --accent2: #7c4fff;
+    --green: #22c55e;
+    --amber: #f59e0b;
+    --red: #ef4444;
+    --text: #e8eaf6;
+    --muted: #8b8fa8;
+    --fire: #ff6b35;
+    --flood: #38bdf8;
+    --natcat: #a78bfa;
+    --bi: #34d399;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', system-ui, sans-serif; min-height: 100vh; }
+
+  header {
+    background: linear-gradient(135deg, #1a1d27 0%, #12152a 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 20px 32px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  header h1 { font-size: 1.3rem; font-weight: 700; letter-spacing: 0.02em; }
+  header h1 span { color: var(--accent); }
+  .badge { background: var(--accent); color: #fff; font-size: 0.7rem; padding: 3px 8px; border-radius: 20px; font-weight: 600; letter-spacing: 0.05em; }
+
+  .container { max-width: 1200px; margin: 0 auto; padding: 28px 24px; }
+
+  /* Step nav */
+  .steps { display: flex; gap: 0; margin-bottom: 32px; background: var(--surface); border-radius: 12px; padding: 6px; border: 1px solid var(--border); }
+  .step-btn { flex: 1; padding: 10px 6px; border: none; background: transparent; color: var(--muted); font-size: 0.78rem; font-weight: 600; border-radius: 8px; cursor: pointer; transition: all 0.2s; text-align: center; letter-spacing: 0.02em; }
+  .step-btn.active { background: var(--accent); color: #fff; }
+  .step-btn.done { color: var(--green); }
+
+  /* Panels */
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  /* Section cards */
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 22px 24px; margin-bottom: 18px; }
+  .card-header { display: flex; align-items: center; gap: 10px; margin-bottom: 18px; }
+  .card-icon { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; flex-shrink: 0; }
+  .card-title { font-size: 1rem; font-weight: 700; }
+  .card-sub { font-size: 0.78rem; color: var(--muted); margin-top: 2px; }
+
+  /* Form fields */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
+  @media(max-width: 700px) { .grid-2, .grid-3 { grid-template-columns: 1fr; } }
+
+  .field { display: flex; flex-direction: column; gap: 5px; }
+  .field label { font-size: 0.75rem; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; }
+  .field input, .field select, .field textarea {
+    background: var(--surface2); border: 1px solid var(--border); border-radius: 8px;
+    color: var(--text); font-size: 0.9rem; padding: 9px 12px; outline: none; transition: border 0.2s; width: 100%;
+  }
+  .field input:focus, .field select:focus { border-color: var(--accent); }
+  .field select option { background: var(--surface2); }
+
+  /* Scoring sliders */
+  .score-row { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; padding: 12px 14px; background: var(--surface2); border-radius: 10px; border: 1px solid var(--border); }
+  .score-label { flex: 1; font-size: 0.84rem; font-weight: 500; }
+  .score-label small { color: var(--muted); font-size: 0.72rem; display: block; margin-top: 1px; }
+  .score-slider { width: 120px; accent-color: var(--accent); }
+  .score-val { width: 28px; text-align: center; font-size: 0.85rem; font-weight: 700; color: var(--accent); }
+  .score-weight { font-size: 0.7rem; color: var(--muted); width: 40px; text-align: right; }
+
+  /* Peril tabs */
+  .peril-tabs { display: flex; gap: 8px; margin-bottom: 18px; flex-wrap: wrap; }
+  .peril-tab { padding: 7px 16px; border-radius: 20px; border: 1.5px solid var(--border); background: transparent; color: var(--muted); font-size: 0.8rem; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+  .peril-tab.active-fire { border-color: var(--fire); background: rgba(255,107,53,0.12); color: var(--fire); }
+  .peril-tab.active-flood { border-color: var(--flood); background: rgba(56,189,248,0.12); color: var(--flood); }
+  .peril-tab.active-natcat { border-color: var(--natcat); background: rgba(167,139,250,0.12); color: var(--natcat); }
+  .peril-tab.active-bi { border-color: var(--bi); background: rgba(52,211,153,0.12); color: var(--bi); }
+  .peril-panel { display: none; }
+  .peril-panel.active { display: block; }
+
+  /* Results */
+  .results-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 22px; }
+  @media(max-width: 800px) { .results-grid { grid-template-columns: 1fr 1fr; } }
+  .result-card { background: var(--surface2); border: 1px solid var(--border); border-radius: 12px; padding: 16px; text-align: center; }
+  .result-card .rc-label { font-size: 0.72rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 6px; }
+  .result-card .rc-value { font-size: 1.6rem; font-weight: 800; }
+  .result-card .rc-sub { font-size: 0.73rem; color: var(--muted); margin-top: 3px; }
+
+  .grade-badge { display: inline-block; padding: 6px 18px; border-radius: 30px; font-size: 1.4rem; font-weight: 900; letter-spacing: 0.05em; }
+  .grade-A { background: rgba(34,197,94,0.15); color: var(--green); border: 2px solid var(--green); }
+  .grade-B { background: rgba(79,124,255,0.15); color: var(--accent); border: 2px solid var(--accent); }
+  .grade-C { background: rgba(245,158,11,0.15); color: var(--amber); border: 2px solid var(--amber); }
+  .grade-D { background: rgba(239,68,68,0.15); color: var(--red); border: 2px solid var(--red); }
+
+  /* Bar chart */
+  .bar-wrap { margin-top: 10px; }
+  .bar-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+  .bar-name { width: 130px; font-size: 0.78rem; color: var(--muted); text-align: right; }
+  .bar-track { flex: 1; background: var(--surface); border-radius: 4px; height: 16px; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 4px; transition: width 0.8s cubic-bezier(.4,0,.2,1); }
+  .bar-num { width: 55px; font-size: 0.78rem; font-weight: 700; }
+
+  /* EML table */
+  .eml-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+  .eml-table th { text-align: left; padding: 10px 12px; font-size: 0.72rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; border-bottom: 1px solid var(--border); }
+  .eml-table td { padding: 11px 12px; border-bottom: 1px solid rgba(46,50,80,0.5); }
+  .eml-table tr:last-child td { border-bottom: none; }
+  .eml-table .highlight { background: rgba(79,124,255,0.07); }
+
+  /* Recommendations */
+  .rec-item { display: flex; gap: 12px; padding: 12px 14px; background: var(--surface2); border-radius: 10px; margin-bottom: 10px; border-left: 3px solid var(--accent); }
+  .rec-item.warn { border-left-color: var(--amber); }
+  .rec-item.critical { border-left-color: var(--red); }
+  .rec-icon { font-size: 1.1rem; flex-shrink: 0; margin-top: 1px; }
+  .rec-text { font-size: 0.84rem; line-height: 1.5; }
+  .rec-text strong { display: block; margin-bottom: 2px; }
+
+  /* Buttons */
+  .btn { padding: 10px 22px; border-radius: 9px; border: none; font-size: 0.88rem; font-weight: 700; cursor: pointer; transition: all 0.2s; letter-spacing: 0.02em; }
+  .btn-primary { background: var(--accent); color: #fff; }
+  .btn-primary:hover { background: #3d6be0; }
+  .btn-outline { background: transparent; border: 1.5px solid var(--border); color: var(--text); }
+  .btn-outline:hover { border-color: var(--accent); color: var(--accent); }
+  .btn-row { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; }
+
+  /* Gauge */
+  .gauge-wrap { display: flex; justify-content: center; margin: 10px 0 18px; }
+  svg.gauge text { font-family: 'Segoe UI', system-ui, sans-serif; }
+
+  .section-title { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); font-weight: 700; margin-bottom: 10px; }
+  .divider { border: none; border-top: 1px solid var(--border); margin: 18px 0; }
+  .tsi-display { font-size: 1.1rem; font-weight: 700; color: var(--accent); }
+  .currency-row { display: flex; align-items: center; gap: 8px; margin-bottom: 16px; }
+  .currency-row label { font-size: 0.75rem; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; white-space: nowrap; }
+  .currency-row select { background: var(--surface2); border: 1px solid var(--border); color: var(--text); border-radius: 8px; padding: 6px 10px; font-size: 0.85rem; outline: none; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>⚡ Multi-Peril <span>Risk Assessment</span> Tool</h1>
+  <span class="badge">EML / PML ENGINE</span>
+</header>
+
+<div class="container">
+
+  <!-- Step Navigation -->
+  <div class="steps">
+    <button class="step-btn active" onclick="goStep(0)">① Site Info</button>
+    <button class="step-btn" onclick="goStep(1)">② Fire / Explosion</button>
+    <button class="step-btn" onclick="goStep(2)">③ NatCat</button>
+    <button class="step-btn" onclick="goStep(3)">④ Flood</button>
+    <button class="step-btn" onclick="goStep(4)">⑤ Bus. Interruption</button>
+    <button class="step-btn" onclick="goStep(5)">⑥ Results & EML</button>
+  </div>
+
+  <!-- PANEL 0: SITE INFO -->
+  <div class="panel active" id="panel-0">
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon" style="background:rgba(79,124,255,0.15)">🏭</div>
+        <div><div class="card-title">Site Information</div><div class="card-sub">General details about the risk location</div></div>
+      </div>
+      <div class="grid-2">
+        <div class="field"><label>Risk Name / Reference</label><input id="riskName" placeholder="e.g. Site A – Manchester Plant" /></div>
+        <div class="field"><label>Occupancy Type</label>
+          <select id="occupancy">
+            <option value="industrial">Industrial / Manufacturing</option>
+            <option value="warehouse">Warehousing / Logistics</option>
+            <option value="commercial">Commercial / Retail</option>
+            <option value="office">Office / Administrative</option>
+            <option value="chemical">Chemical / Petrochemical</option>
+            <option value="food">Food & Beverage Processing</option>
+            <option value="mixed">Mixed Occupancy</option>
+          </select>
+        </div>
+        <div class="field"><label>Country / Territory</label><input id="country" placeholder="e.g. United Kingdom" /></div>
+        <div class="field"><label>Construction Type</label>
+          <select id="construction">
+            <option value="fr">Fire Resistive (Concrete/Steel)</option>
+            <option value="masonry">Masonry / Brick</option>
+            <option value="steel">Non-combustible Steel Frame</option>
+            <option value="mixed">Mixed Construction</option>
+            <option value="wood">Combustible / Timber Frame</option>
+          </select>
+        </div>
+        <div class="field"><label>Year Built</label><input id="yearBuilt" type="number" placeholder="e.g. 1998" /></div>
+        <div class="field"><label>Total Floor Area (m²)</label><input id="floorArea" type="number" placeholder="e.g. 15000" /></div>
+        <div class="field"><label>Number of Storeys</label><input id="storeys" type="number" placeholder="e.g. 3" /></div>
+        <div class="field"><label>Number of Buildings</label><input id="buildings" type="number" placeholder="e.g. 2" /></div>
+      </div>
+      <hr class="divider">
+      <div class="currency-row">
+        <label>Currency:</label>
+        <select id="currency" onchange="updateCurrency()">
+          <option value="GBP">£ GBP</option><option value="USD">$ USD</option><option value="EUR">€ EUR</option>
+        </select>
+      </div>
+      <div class="grid-3">
+        <div class="field"><label>Buildings Value (<span class="curr-sym">£</span>)</label><input id="valBuildings" type="number" placeholder="e.g. 5000000" oninput="updateTSI()" /></div>
+        <div class="field"><label>Contents / Stock (<span class="curr-sym">£</span>)</label><input id="valContents" type="number" placeholder="e.g. 2000000" oninput="updateTSI()" /></div>
+        <div class="field"><label>Plant & Machinery (<span class="curr-sym">£</span>)</label><input id="valPlant" type="number" placeholder="e.g. 3000000" oninput="updateTSI()" /></div>
+        <div class="field"><label>Annual Turnover (<span class="curr-sym">£</span>)</label><input id="valTurnover" type="number" placeholder="e.g. 10000000" oninput="updateTSI()" /></div>
+        <div class="field"><label>Gross Profit (<span class="curr-sym">£</span>)</label><input id="valGP" type="number" placeholder="e.g. 3000000" oninput="updateTSI()" /></div>
+        <div class="field"><label>Indemnity Period (months)</label><input id="indemnity" type="number" placeholder="e.g. 12" value="12" /></div>
+      </div>
+      <div style="margin-top:12px; padding:12px 16px; background:var(--surface2); border-radius:10px; display:flex; align-items:center; justify-content:space-between;">
+        <span style="font-size:0.8rem; color:var(--muted);">Total Sum Insured (TSI)</span>
+        <span class="tsi-display" id="tsiDisplay">—</span>
+      </div>
+    </div>
+    <div class="btn-row"><button class="btn btn-primary" onclick="goStep(1)">Next: Fire / Explosion →</button></div>
+  </div>
+
+  <!-- PANEL 1: FIRE -->
+  <div class="panel" id="panel-1">
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon" style="background:rgba(255,107,53,0.15)">🔥</div>
+        <div><div class="card-title">Fire & Explosion Risk Scoring</div><div class="card-sub">Score each factor 1–5 (1=Excellent, 5=Poor)</div></div>
+      </div>
+      <div class="section-title">Ignition & Hazard Factors</div>
+      <div id="fire-scores"></div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-outline" onclick="goStep(0)">← Back</button>
+      <button class="btn btn-primary" onclick="goStep(2)">Next: NatCat →</button>
+    </div>
+  </div>
+
+  <!-- PANEL 2: NATCAT -->
+  <div class="panel" id="panel-2">
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon" style="background:rgba(167,139,250,0.15)">🌪️</div>
+        <div><div class="card-title">Natural Catastrophe Risk Scoring</div><div class="card-sub">Score exposure and vulnerability for each peril</div></div>
+      </div>
+      <div id="natcat-scores"></div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-outline" onclick="goStep(1)">← Back</button>
+      <button class="btn btn-primary" onclick="goStep(3)">Next: Flood →</button>
+    </div>
+  </div>
+
+  <!-- PANEL 3: FLOOD -->
+  <div class="panel" id="panel-3">
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon" style="background:rgba(56,189,248,0.15)">💧</div>
+        <div><div class="card-title">Flood Risk Scoring</div><div class="card-sub">Assess flood zone, exposure and protection measures</div></div>
+      </div>
+      <div id="flood-scores"></div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-outline" onclick="goStep(2)">← Back</button>
+      <button class="btn btn-primary" onclick="goStep(4)">Next: Business Interruption →</button>
+    </div>
+  </div>
+
+  <!-- PANEL 4: BI -->
+  <div class="panel" id="panel-4">
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon" style="background:rgba(52,211,153,0.15)">📊</div>
+        <div><div class="card-title">Business Interruption Risk Scoring</div><div class="card-sub">Assess supply chain, resilience and recovery factors</div></div>
+      </div>
+      <div id="bi-scores"></div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-outline" onclick="goStep(3)">← Back</button>
+      <button class="btn btn-primary" onclick="calcResults(); goStep(5)">Calculate Results →</button>
+    </div>
+  </div>
+
+  <!-- PANEL 5: RESULTS -->
+  <div class="panel" id="panel-5">
+    <div class="card" id="results-card">
+      <div class="card-header">
+        <div class="card-icon" style="background:rgba(79,124,255,0.15)">📋</div>
+        <div><div class="card-title" id="res-site-name">Risk Assessment Report</div><div class="card-sub" id="res-site-sub">Generated assessment</div></div>
+      </div>
+
+      <div class="results-grid" id="results-grid"></div>
+      <div class="gauge-wrap"><svg class="gauge" width="260" height="140" viewBox="0 0 260 140" id="gauge-svg"></svg></div>
+
+      <hr class="divider">
+      <div class="section-title">Peril Score Breakdown</div>
+      <div class="bar-wrap" id="bar-wrap"></div>
+
+      <hr class="divider">
+      <div class="section-title">EML / PML Estimates</div>
+      <table class="eml-table">
+        <thead><tr><th>Peril</th><th>Scenario</th><th>EML %</th><th>EML Value (<span class="curr-sym">£</span>)</th><th>PML %</th><th>PML Value (<span class="curr-sym">£</span>)</th></tr></thead>
+        <tbody id="eml-tbody"></tbody>
+      </table>
+
+      <hr class="divider">
+      <div class="section-title">Risk Recommendations</div>
+      <div id="recommendations"></div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-outline" onclick="goStep(4)">← Edit Scores</button>
+      <button class="btn btn-primary" onclick="window.print()">🖨 Print / Export</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ─── SCORE DEFINITIONS ───────────────────────────────────────────────────────
+const scoreDefs = {
+  fire: [
+    { id:'f1', label:'Housekeeping & Waste Management', hint:'General tidiness, waste disposal, combustible accumulation', w:8 },
+    { id:'f2', label:'Hot Work Controls', hint:'Permit to work system, hot work procedures', w:7 },
+    { id:'f3', label:'Electrical Installation Condition', hint:'Recent EICR, age of installation, maintenance', w:9 },
+    { id:'f4', label:'Flammable Liquid / Gas Storage', hint:'Storage quantities, segregation, ventilation', w:8 },
+    { id:'f5', label:'Automatic Sprinkler System', hint:'Full coverage, tested, FM/LPC approved', w:12 },
+    { id:'f6', label:'Fire Detection & Alarm System', hint:'L1/M1 system, coverage, monitoring', w:9 },
+    { id:'f7', label:'Fire Compartmentation', hint:'Fire walls, dampers, door ratings', w:8 },
+    { id:'f8', label:'Site Security', hint:'Access control, CCTV, night watchman', w:6 },
+    { id:'f9', label:'Emergency Response Plan', hint:'Fire plan, drills, staff training', w:7 },
+    { id:'f10', label:'Fire Service Access & Response', hint:'Proximity of fire station, access roads, hydrants', w:6 },
+    { id:'f11', label:'Process Explosion Risk', hint:'Dust, vapour or pressure explosion hazard', w:10 },
+    { id:'f12', label:'Lightning Protection', hint:'LPS installed and tested', w:5 },
+    { id:'f13', label:'Contractor Management', hint:'Contractor vetting and supervision', w:5 },
+  ],
+  natcat: [
+    { id:'n1', label:'Earthquake Zone Exposure', hint:'Seismic hazard zone (PGA / MSK scale)', w:15 },
+    { id:'n2', label:'Windstorm / Hurricane Exposure', hint:'Return period wind speed at location', w:12 },
+    { id:'n3', label:'Subsidence / Ground Movement', hint:'Clay soil, mining, shrink-swell risk', w:8 },
+    { id:'n4', label:'Structural Seismic Resilience', hint:'Building design, age, isolation systems', w:12 },
+    { id:'n5', label:'Roof Integrity (Wind)', hint:'Roof cladding, fixings, uplift resistance', w:10 },
+    { id:'n6', label:'Cladding & Façade Vulnerability', hint:'Glazing, cladding panels, wind resistance', w:8 },
+    { id:'n7', label:'Utility Resilience (Grid)', hint:'Backup power, vulnerability to outages', w:8 },
+    { id:'n8', label:'Geographic Isolation Risk', hint:'Remote location, single road access', w:7 },
+    { id:'n9', label:'NatCat Emergency Plan', hint:'Crisis management, evacuation, BCP', w:10 },
+    { id:'n10', label:'NatCat Loss History', hint:'Any prior storm/earthquake losses', w:10 },
+  ],
+  flood: [
+    { id:'fl1', label:'Flood Zone Classification', hint:'EA flood zone 1/2/3 or equivalent', w:20 },
+    { id:'fl2', label:'Proximity to Watercourse', hint:'Distance to river, stream or canal', w:10 },
+    { id:'fl3', label:'Site Elevation / Drainage', hint:'Site level relative to watercourse, surface drainage', w:10 },
+    { id:'fl4', label:'Flood Defence / Barrier', hint:'Flood gates, flood walls, demountable barriers', w:12 },
+    { id:'fl5', label:'Critical Equipment Elevation', hint:'Switchgear, servers, plant above flood level', w:10 },
+    { id:'fl6', label:'Flood Warning & Response Plan', hint:'EA alerts, sandbagging plan, staff awareness', w:10 },
+    { id:'fl7', label:'Basement / Below-grade Areas', hint:'Extent of basement areas and flood risk', w:8 },
+    { id:'fl8', label:'Pluvial / Surface Water Risk', hint:'Impervious surfaces, blocked drains, ponding', w:10 },
+    { id:'fl9', label:'Flood Loss History', hint:'Previous flood incidents at site', w:10 },
+  ],
+  bi: [
+    { id:'b1', label:'Single-Source Supplier Dependency', hint:'Reliance on single critical supplier', w:10 },
+    { id:'b2', label:'Alternative Suppliers Available', hint:'Vetted backup suppliers for key materials', w:8 },
+    { id:'b3', label:'Critical Machinery Replication', hint:'Spare capacity or backup equipment', w:10 },
+    { id:'b4', label:'Lead Time for Key Equipment', hint:'Replacement time for critical plant', w:9 },
+    { id:'b5', label:'Stock / Inventory Buffer', hint:'Finished goods and raw material stock levels', w:7 },
+    { id:'b6', label:'IT / Data Resilience', hint:'Backups, DR site, cybersecurity posture', w:9 },
+    { id:'b7', label:'Business Continuity Plan', hint:'Documented, tested BCP in place', w:10 },
+    { id:'b8', label:'Alternative Production Sites', hint:'Ability to transfer production elsewhere', w:9 },
+    { id:'b9', label:'Utilities Resilience', hint:'Generator, water backup, UPS systems', w:8 },
+    { id:'b10', label:'Customer Concentration Risk', hint:'Revenue concentration in few customers', w:8 },
+    { id:'b11', label:'Contractual Penalties / SLAs', hint:'Exposure to penalty clauses on outage', w:7 },
+    { id:'b12', label:'Extended Indemnity Period Adequacy', hint:'Is the selected IP sufficient for recovery?', w:5 },
+  ]
+};
+
+// ─── BUILD SCORE ROWS ─────────────────────────────────────────────────────────
+function buildScoreRows(peril, containerId) {
+  const defs = scoreDefs[peril];
+  const container = document.getElementById(containerId);
+  container.innerHTML = '';
+  defs.forEach(d => {
+    const row = document.createElement('div');
+    row.className = 'score-row';
+    row.innerHTML = `
+      <div class="score-label">${d.label}<small>${d.hint}</small></div>
+      <input type="range" class="score-slider" min="1" max="5" value="3" id="${d.id}" oninput="document.getElementById('v_${d.id}').textContent=this.value">
+      <div class="score-val" id="v_${d.id}">3</div>
+      <div class="score-weight">w:${d.w}%</div>
+    `;
+    container.appendChild(row);
+  });
+}
+buildScoreRows('fire','fire-scores');
+buildScoreRows('natcat','natcat-scores');
+buildScoreRows('flood','flood-scores');
+buildScoreRows('bi','bi-scores');
+
+// ─── STEP NAVIGATION ─────────────────────────────────────────────────────────
+function goStep(i) {
+  document.querySelectorAll('.panel').forEach((p,j) => p.classList.toggle('active', j===i));
+  document.querySelectorAll('.step-btn').forEach((b,j) => {
+    b.classList.toggle('active', j===i);
+    if(j<i) b.classList.add('done'); else b.classList.remove('done');
+  });
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// ─── TSI / CURRENCY ───────────────────────────────────────────────────────────
+function fmt(n) { return isNaN(n)||n===0?'—':n.toLocaleString('en-GB',{maximumFractionDigits:0}); }
+function fmtC(n) { const s = document.getElementById('currency').value; const sym = s==='USD'?'$':s==='EUR'?'€':'£'; return sym+fmt(n); }
+function updateTSI() {
+  const b = +document.getElementById('valBuildings').value||0;
+  const c = +document.getElementById('valContents').value||0;
+  const p = +document.getElementById('valPlant').value||0;
+  const tsi = b+c+p;
+  document.getElementById('tsiDisplay').textContent = tsi ? fmtC(tsi) : '—';
+}
+function updateCurrency() {
+  const s = document.getElementById('currency').value;
+  const sym = s==='USD'?'$':s==='EUR'?'€':'£';
+  document.querySelectorAll('.curr-sym').forEach(el=>el.textContent=sym);
+  updateTSI();
+}
+
+// ─── SCORING ENGINE ───────────────────────────────────────────────────────────
+function calcPerilScore(peril) {
+  const defs = scoreDefs[peril];
+  let wtSum=0, wSum=0;
+  defs.forEach(d => { const v = +document.getElementById(d.id).value; wtSum += v*d.w; wSum += d.w; });
+  const rawAvg = wtSum/wSum; // 1–5, lower=better
+  const score = Math.round(((5-rawAvg)/4)*100); // convert to 0–100 (100=best)
+  return score;
+}
+
+function gradeFromScore(s) {
+  if(s>=75) return 'A';
+  if(s>=55) return 'B';
+  if(s>=35) return 'C';
+  return 'D';
+}
+
+// EML/PML lookup tables (peril, grade → EML%, PML%)
+const emlTable = {
+  fire:   { A:[15,25], B:[25,40], C:[40,65], D:[65,90] },
+  natcat: { A:[5,10],  B:[10,20], C:[20,35], D:[35,60] },
+  flood:  { A:[10,20], B:[20,35], C:[35,55], D:[55,80] },
+  bi:     { A:[10,15], B:[15,25], C:[25,40], D:[40,70] },
+};
+
+function calcResults() {
+  const scores = {
+    fire: calcPerilScore('fire'),
+    natcat: calcPerilScore('natcat'),
+    flood: calcPerilScore('flood'),
+    bi: calcPerilScore('bi'),
+  };
+  const overall = Math.round((scores.fire*0.35 + scores.natcat*0.25 + scores.flood*0.20 + scores.bi*0.20));
+  const grade = gradeFromScore(overall);
+
+  // TSI
+  const bldg = +document.getElementById('valBuildings').value||0;
+  const cont = +document.getElementById('valContents').value||0;
+  const plant = +document.getElementById('valPlant').value||0;
+  const gp = +document.getElementById('valGP').value||0;
+  const ip = +document.getElementById('indemnity').value||12;
+  const tsi = bldg+cont+plant;
+  const biExposure = gp * (ip/12);
+
+  const siteName = document.getElementById('riskName').value || 'Unnamed Site';
+  const occ = document.getElementById('occupancy').value;
+
+  // Header
+  document.getElementById('res-site-name').textContent = siteName + ' – Risk Assessment';
+  document.getElementById('res-site-sub').textContent = `Occupancy: ${document.getElementById('occupancy').options[document.getElementById('occupancy').selectedIndex].text} | ${new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'})}`;
+
+  // Results grid
+  const rg = document.getElementById('results-grid');
+  rg.innerHTML = `
+    <div class="result-card"><div class="rc-label">Overall Risk Score</div><div class="rc-value" style="color:${grade==='A'?'var(--green)':grade==='B'?'var(--accent)':grade==='C'?'var(--amber)':'var(--red)'}">${overall}/100</div><div class="rc-sub">Composite score</div></div>
+    <div class="result-card"><div class="rc-label">Risk Grade</div><div class="rc-value"><span class="grade-badge grade-${grade}">${grade}</span></div><div class="rc-sub">${grade==='A'?'Low Risk':grade==='B'?'Below Average':grade==='C'?'Average / Moderate':'High Risk'}</div></div>
+    <div class="result-card"><div class="rc-label">Total Sum Insured</div><div class="rc-value" style="font-size:1.1rem;color:var(--accent)">${tsi?fmtC(tsi):'N/A'}</div><div class="rc-sub">Buildings + Contents + Plant</div></div>
+    <div class="result-card"><div class="rc-label">BI Exposure</div><div class="rc-value" style="font-size:1.1rem;color:var(--bi)">${biExposure?fmtC(biExposure):'N/A'}</div><div class="rc-sub">GP × Indemnity Period</div></div>
+  `;
+
+  // Gauge
+  drawGauge(overall, grade);
+
+  // Bar chart
+  const bw = document.getElementById('bar-wrap');
+  const perilColors = { fire:'var(--fire)', natcat:'var(--natcat)', flood:'var(--flood)', bi:'var(--bi)' };
+  const perilLabels = { fire:'Fire / Explosion', natcat:'NatCat', flood:'Flood / Water', bi:'Bus. Interruption' };
+  bw.innerHTML = '';
+  ['fire','natcat','flood','bi'].forEach(p => {
+    const sc = scores[p];
+    const g = gradeFromScore(sc);
+    const row = document.createElement('div'); row.className='bar-row';
+    row.innerHTML = `
+      <div class="bar-name">${perilLabels[p]}</div>
+      <div class="bar-track"><div class="bar-fill" style="width:${sc}%;background:${perilColors[p]}"></div></div>
+      <div class="bar-num" style="color:${perilColors[p]}">${sc}/100 <span style="font-size:0.7rem;color:var(--muted)">${g}</span></div>
+    `;
+    bw.appendChild(row);
+  });
+
+  // EML table
+  const tbody = document.getElementById('eml-tbody');
+  tbody.innerHTML = '';
+  const perilNames = { fire:'Fire & Explosion', natcat:'Natural Catastrophe', flood:'Flood / Water Damage', bi:'Business Interruption' };
+  const scenarios = { fire:'Single largest fire cell', natcat:'1-in-250yr event', flood:'1-in-100yr flood', bi:'Maximum BI scenario' };
+  let totalEML = 0, totalPML = 0;
+  ['fire','natcat','flood','bi'].forEach(p => {
+    const g = gradeFromScore(scores[p]);
+    const [emlPct, pmlPct] = emlTable[p][g];
+    const base = (p==='bi') ? biExposure : tsi;
+    const emlVal = Math.round(base * emlPct/100);
+    const pmlVal = Math.round(base * pmlPct/100);
+    if(p!=='bi') { totalEML += emlVal; totalPML += pmlVal; }
+    tbody.innerHTML += `<tr><td>${perilNames[p]}</td><td style="color:var(--muted);font-size:0.8rem">${scenarios[p]}</td><td>${emlPct}%</td><td>${base?fmtC(emlVal):'N/A'}</td><td>${pmlPct}%</td><td>${base?fmtC(pmlVal):'N/A'}</td></tr>`;
+  });
+  tbody.innerHTML += `<tr class="highlight"><td colspan="3"><strong>Combined Property EML/PML (excl. BI)</strong></td><td><strong>${tsi?fmtC(totalEML):'N/A'}</strong></td><td></td><td><strong>${tsi?fmtC(totalPML):'N/A'}</strong></td></tr>`;
+
+  // Recommendations
+  buildRecs(scores, grade, occ);
+}
+
+function drawGauge(score, grade) {
+  const svg = document.getElementById('gauge-svg');
+  const cx=130, cy=120, r=90;
+  const startA = Math.PI, endA = 2*Math.PI;
+  function polar(cx,cy,r,angle){ return [cx+r*Math.cos(angle), cy+r*Math.sin(angle)]; }
+  function arc(cx,cy,r,a1,a2){ const [x1,y1]=polar(cx,cy,r,a1); const [x2,y2]=polar(cx,cy,r,a2); const lg=a2-a1>Math.PI?1:0; return `M ${x1} ${y1} A ${r} ${r} 0 ${lg} 1 ${x2} ${y2}`; }
+  const zones=[{a:0.0,b:0.25,c:'#ef4444'},{a:0.25,b:0.5,c:'#f59e0b'},{a:0.5,b:0.75,c:'#4f7cff'},{a:0.75,b:1.0,c:'#22c55e'}];
+  let paths = '';
+  zones.forEach(z => {
+    const a1 = Math.PI + z.a*Math.PI;
+    const a2 = Math.PI + z.b*Math.PI;
+    paths += `<path d="${arc(cx,cy,r,a1,a2)}" stroke="${z.c}" stroke-width="18" fill="none" stroke-linecap="butt" opacity="0.7"/>`;
+  });
+  // needle
+  const needleA = Math.PI + (score/100)*Math.PI;
+  const [nx,ny] = polar(cx,cy,75,needleA);
+  const col = grade==='A'?'#22c55e':grade==='B'?'#4f7cff':grade==='C'?'#f59e0b':'#ef4444';
+  paths += `<line x1="${cx}" y1="${cy}" x2="${nx}" y2="${ny}" stroke="${col}" stroke-width="3" stroke-linecap="round"/>`;
+  paths += `<circle cx="${cx}" cy="${cy}" r="7" fill="${col}"/>`;
+  paths += `<text x="${cx}" y="${cy-20}" text-anchor="middle" fill="#e8eaf6" font-size="26" font-weight="800">${score}</text>`;
+  paths += `<text x="${cx}" y="${cy+4}" text-anchor="middle" fill="#8b8fa8" font-size="11">OVERALL SCORE</text>`;
+  paths += `<text x="50" y="${cy+18}" fill="#ef4444" font-size="10">High</text>`;
+  paths += `<text x="205" y="${cy+18}" fill="#22c55e" font-size="10">Low</text>`;
+  svg.innerHTML = paths;
+}
+
+function buildRecs(scores, grade, occ) {
+  const container = document.getElementById('recommendations');
+  container.innerHTML = '';
+  const recs = [];
+
+  if(scores.fire < 55) {
+    recs.push({ level:'critical', icon:'🔥', title:'Fire Protection Deficiencies Identified', text:'Review sprinkler coverage, fire compartmentation and hot work permit controls. Consider commissioning an FPA/LPC-standard fire risk assessment.' });
+  }
+  if(scores.fire >= 55 && scores.fire < 75) {
+    recs.push({ level:'warn', icon:'⚠️', title:'Fire Risk – Moderate Concerns', text:'Ensure fire detection system meets L1 standard with central monitoring. Review electrical installation condition reports (EICR) and housekeeping procedures.' });
+  }
+  if(scores.natcat < 55) {
+    recs.push({ level:'critical', icon:'🌪️', title:'Significant NatCat Exposure', text:'Structural resilience assessment recommended. Verify wind uplift calculations for roof design. Consider parametric NatCat cover in programme.' });
+  }
+  if(scores.flood < 50) {
+    recs.push({ level:'critical', icon:'💧', title:'High Flood Risk – Urgent Action Required', text:'Install permanent or demountable flood defences. Elevate all critical electrical switchgear above predicted flood level. Register for EA Flood Warning service.' });
+  } else if(scores.flood < 70) {
+    recs.push({ level:'warn', icon:'💧', title:'Flood Risk – Mitigation Recommended', text:'Review site drainage capacity and confirm surface water management plan. Ensure flood response plan is documented and staff trained.' });
+  }
+  if(scores.bi < 55) {
+    recs.push({ level:'critical', icon:'📊', title:'Business Interruption Exposure – High', text:'Single points of failure identified. Develop and test a Business Continuity Plan. Review adequacy of indemnity period and consider contingency stock.' });
+  }
+  if(grade === 'A') {
+    recs.push({ level:'ok', icon:'✅', title:'Strong Risk Profile', text:'Site demonstrates good risk management standards. Continue annual risk reviews and maintain current protection standards. Consider risk improvement credits with underwriters.' });
+  }
+  recs.push({ level:'ok', icon:'📅', title:'Recommended Survey Frequency', text: grade==='A'?'Triennial risk survey recommended.':grade==='B'?'Biennial risk survey recommended.':'Annual risk engineering survey strongly recommended.' });
+
+  recs.forEach(r => {
+    const div = document.createElement('div');
+    div.className = `rec-item${r.level==='critical'?' critical':r.level==='warn'?' warn':''}`;
+    div.innerHTML = `<div class="rec-icon">${r.icon}</div><div class="rec-text"><strong>${r.title}</strong>${r.text}</div>`;
+    container.appendChild(div);
+  });
+}
+
+// init
+updateTSI();
+</script>
+</body>
+</html>

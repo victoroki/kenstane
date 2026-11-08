@@ -1,0 +1,95 @@
+name: Build & Deploy (cPanel)
+
+# staging branch          -> https://staging.kenstaneenergy.co.ke  (GitHub environment: staging)
+# main / master branch    -> https://www.kenstaneenergy.co.ke      (GitHub environment: production)
+on:
+  push:
+    branches: [staging, main, master]
+  workflow_dispatch:
+
+# Only one deploy per branch at a time; a newer push cancels an older one.
+concurrency:
+  group: deploy-${{ github.ref_name }}
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: ${{ github.ref_name == 'staging' && 'staging' || 'production' }}
+      url: ${{ vars.SITE_URL }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        env:
+          # react-snap ships an old Chromium; use the Chrome already on the runner instead.
+          PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: "true"
+        run: npm ci
+
+      - name: Point react-snap at the runner's Chrome (CI only)
+        run: |
+          CHROME_PATH="$(command -v google-chrome || command -v google-chrome-stable || command -v chromium)"
+          echo "Using Chrome at $CHROME_PATH"
+          jq --arg chrome "$CHROME_PATH" \
+            '.reactSnap.puppeteerExecutablePath = $chrome
+             | .reactSnap.puppeteerArgs = ["--no-sandbox", "--disable-setuid-sandbox"]' \
+            package.json > package.tmp.json && mv package.tmp.json package.json
+
+      - name: Build (react-scripts build + react-snap)
+        env:
+          # CRA fails the build on lint warnings when CI=true; keep it like your local build.
+          CI: "false"
+          GENERATE_SOURCEMAP: "false"
+        run: npm run build
+
+      - name: Staging tweaks (.htaccess + no indexing)
+        if: github.ref_name == 'staging'
+        run: |
+          # Production .htaccess forces www.kenstaneenergy.co.ke; staging must only force HTTPS.
+          cat > build/.htaccess <<'HTACCESS'
+          RewriteEngine On
+
+          # Force HTTPS (keep the staging host)
+          RewriteCond %{HTTPS} off
+          RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]
+
+          # Keep staging out of Google
+          <IfModule mod_headers.c>
+            Header set X-Robots-Tag "noindex, nofollow"
+          </IfModule>
+
+          # React Router fallback
+          <IfModule mod_rewrite.c>
+            RewriteBase /
+            RewriteRule ^index\.html$ - [L]
+            RewriteCond %{REQUEST_FILENAME} !-f
+            RewriteCond %{REQUEST_FILENAME} !-d
+            RewriteCond %{REQUEST_FILENAME} !-l
+            RewriteRule . /index.html [L]
+          </IfModule>
+          HTACCESS
+          sed -i 's/^          //' build/.htaccess
+          printf 'User-agent: *\nDisallow: /\n' > build/robots.txt
+
+      - name: Deploy to cPanel via FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          port: ${{ vars.FTP_PORT || 21 }}
+          protocol: ${{ vars.FTP_PROTOCOL || 'ftps' }}
+          local-dir: ./build/
+          server-dir: ${{ vars.FTP_SERVER_DIR }}
+          exclude: |
+            **/.git*
+            **/.git*/**
